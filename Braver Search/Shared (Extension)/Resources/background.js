@@ -3,6 +3,12 @@
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.url) {
         const url = new URL(changeInfo.url);
+        
+        // Skip if already on Brave Search
+        if (url.hostname === 'search.brave.com') {
+            return;
+        }
+        
         const searchQuery = url.searchParams.get('q');
         
         if (searchQuery) {
