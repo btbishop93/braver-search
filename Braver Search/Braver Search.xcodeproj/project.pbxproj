@@ -1,0 +1,909 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CE77FAE32D3C8C8000B47EE3 /* Braver Search Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE77FAE22D3C8C8000B47EE3 /* Braver Search Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CE77FAED2D3C8C8000B47EE3 /* Braver Search Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CE77FAE42D3C8C8000B47EE3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE77FAA82D3C8C7E00B47EE3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE77FAE12D3C8C8000B47EE3;
+			remoteInfo = "Braver Search Extension (iOS)";
+		};
+		CE77FAEE2D3C8C8000B47EE3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE77FAA82D3C8C7E00B47EE3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE77FAEB2D3C8C8000B47EE3;
+			remoteInfo = "Braver Search Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CE77FB162D3C8C8000B47EE3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CE77FAE32D3C8C8000B47EE3 /* Braver Search Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FB202D3C8C8000B47EE3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CE77FAED2D3C8C8000B47EE3 /* Braver Search Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		CE77FAC42D3C8C8000B47EE3 /* Braver Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Braver Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE77FAD62D3C8C8000B47EE3 /* Braver Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Braver Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE77FAE22D3C8C8000B47EE3 /* Braver Search Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Braver Search Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Braver Search Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE77FB7A2D3C980A00B47EE3 /* Braver Search Extension (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Braver Search Extension (iOS).entitlements"; sourceTree = "<group>"; };
+		CE77FB7B2D3C983A00B47EE3 /* Braver Search (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Braver Search (iOS).entitlements"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CE77FB112D3C8C8000B47EE3 /* Exceptions for "Shared (App)" folder in "Braver Search (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Resources/Main.html",
+				Assets.xcassets,
+				Resources/Icon.png,
+				Resources/Script.js,
+				Resources/Style.css,
+				ViewController.swift,
+			);
+			target = CE77FAC32D3C8C8000B47EE3 /* Braver Search (iOS) */;
+		};
+		CE77FB152D3C8C8000B47EE3 /* Exceptions for "iOS (Extension)" folder in "Braver Search Extension (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */;
+		};
+		CE77FB1A2D3C8C8000B47EE3 /* Exceptions for "iOS (App)" folder in "Braver Search (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CE77FAC32D3C8C8000B47EE3 /* Braver Search (iOS) */;
+		};
+		CE77FB1B2D3C8C8000B47EE3 /* Exceptions for "Shared (App)" folder in "Braver Search (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Resources/Main.html",
+				Assets.xcassets,
+				Resources/Icon.png,
+				Resources/Script.js,
+				Resources/Style.css,
+				ViewController.swift,
+			);
+			target = CE77FAD52D3C8C8000B47EE3 /* Braver Search (macOS) */;
+		};
+		CE77FB1F2D3C8C8000B47EE3 /* Exceptions for "macOS (Extension)" folder in "Braver Search Extension (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */;
+		};
+		CE77FB242D3C8C8000B47EE3 /* Exceptions for "Shared (Extension)" folder in "Braver Search Extension (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/_locales,
+				Resources/background.js,
+				Resources/images,
+				Resources/manifest.json,
+				Resources/popup.css,
+				Resources/popup.html,
+				Resources/popup.js,
+				SafariWebExtensionHandler.swift,
+			);
+			target = CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */;
+		};
+		CE77FB252D3C8C8000B47EE3 /* Exceptions for "Shared (Extension)" folder in "Braver Search Extension (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/_locales,
+				Resources/background.js,
+				Resources/images,
+				Resources/manifest.json,
+				Resources/popup.css,
+				Resources/popup.html,
+				Resources/popup.js,
+				SafariWebExtensionHandler.swift,
+			);
+			target = CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CE77FAAC2D3C8C7F00B47EE3 /* Shared (App) */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE77FB112D3C8C8000B47EE3 /* Exceptions for "Shared (App)" folder in "Braver Search (iOS)" target */,
+				CE77FB1B2D3C8C8000B47EE3 /* Exceptions for "Shared (App)" folder in "Braver Search (macOS)" target */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		CE77FAB52D3C8C7F00B47EE3 /* Shared (Extension) */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE77FB242D3C8C8000B47EE3 /* Exceptions for "Shared (Extension)" folder in "Braver Search Extension (iOS)" target */,
+				CE77FB252D3C8C8000B47EE3 /* Exceptions for "Shared (Extension)" folder in "Braver Search Extension (macOS)" target */,
+			);
+			explicitFolders = (
+				Resources/_locales,
+				Resources/images,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		CE77FAC62D3C8C8000B47EE3 /* iOS (App) */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE77FB1A2D3C8C8000B47EE3 /* Exceptions for "iOS (App)" folder in "Braver Search (iOS)" target */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		CE77FAD72D3C8C8000B47EE3 /* macOS (App) */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		CE77FAE62D3C8C8000B47EE3 /* iOS (Extension) */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE77FB152D3C8C8000B47EE3 /* Exceptions for "iOS (Extension)" folder in "Braver Search Extension (iOS)" target */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		CE77FAF02D3C8C8000B47EE3 /* macOS (Extension) */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE77FB1F2D3C8C8000B47EE3 /* Exceptions for "macOS (Extension)" folder in "Braver Search Extension (macOS)" target */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE77FAC12D3C8C8000B47EE3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FAD32D3C8C8000B47EE3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FADF2D3C8C8000B47EE3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FAE92D3C8C8000B47EE3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CE77FAA72D3C8C7E00B47EE3 = {
+			isa = PBXGroup;
+			children = (
+				CE77FB7B2D3C983A00B47EE3 /* Braver Search (iOS).entitlements */,
+				CE77FB7A2D3C980A00B47EE3 /* Braver Search Extension (iOS).entitlements */,
+				CE77FAAC2D3C8C7F00B47EE3 /* Shared (App) */,
+				CE77FAB52D3C8C7F00B47EE3 /* Shared (Extension) */,
+				CE77FAC62D3C8C8000B47EE3 /* iOS (App) */,
+				CE77FAD72D3C8C8000B47EE3 /* macOS (App) */,
+				CE77FAE62D3C8C8000B47EE3 /* iOS (Extension) */,
+				CE77FAF02D3C8C8000B47EE3 /* macOS (Extension) */,
+				CE77FAC52D3C8C8000B47EE3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CE77FAC52D3C8C8000B47EE3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CE77FAC42D3C8C8000B47EE3 /* Braver Search.app */,
+				CE77FAD62D3C8C8000B47EE3 /* Braver Search.app */,
+				CE77FAE22D3C8C8000B47EE3 /* Braver Search Extension.appex */,
+				CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE77FAC32D3C8C8000B47EE3 /* Braver Search (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE77FB172D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search (iOS)" */;
+			buildPhases = (
+				CE77FAC02D3C8C8000B47EE3 /* Sources */,
+				CE77FAC12D3C8C8000B47EE3 /* Frameworks */,
+				CE77FAC22D3C8C8000B47EE3 /* Resources */,
+				CE77FB162D3C8C8000B47EE3 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CE77FAE52D3C8C8000B47EE3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CE77FAC62D3C8C8000B47EE3 /* iOS (App) */,
+			);
+			name = "Braver Search (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Braver Search (iOS)";
+			productReference = CE77FAC42D3C8C8000B47EE3 /* Braver Search.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CE77FAD52D3C8C8000B47EE3 /* Braver Search (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE77FB212D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search (macOS)" */;
+			buildPhases = (
+				CE77FAD22D3C8C8000B47EE3 /* Sources */,
+				CE77FAD32D3C8C8000B47EE3 /* Frameworks */,
+				CE77FAD42D3C8C8000B47EE3 /* Resources */,
+				CE77FB202D3C8C8000B47EE3 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CE77FAEF2D3C8C8000B47EE3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CE77FAD72D3C8C8000B47EE3 /* macOS (App) */,
+			);
+			name = "Braver Search (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Braver Search (macOS)";
+			productReference = CE77FAD62D3C8C8000B47EE3 /* Braver Search.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE77FB122D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search Extension (iOS)" */;
+			buildPhases = (
+				CE77FADE2D3C8C8000B47EE3 /* Sources */,
+				CE77FADF2D3C8C8000B47EE3 /* Frameworks */,
+				CE77FAE02D3C8C8000B47EE3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CE77FAE62D3C8C8000B47EE3 /* iOS (Extension) */,
+			);
+			name = "Braver Search Extension (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Braver Search Extension (iOS)";
+			productReference = CE77FAE22D3C8C8000B47EE3 /* Braver Search Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE77FB1C2D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search Extension (macOS)" */;
+			buildPhases = (
+				CE77FAE82D3C8C8000B47EE3 /* Sources */,
+				CE77FAE92D3C8C8000B47EE3 /* Frameworks */,
+				CE77FAEA2D3C8C8000B47EE3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CE77FAF02D3C8C8000B47EE3 /* macOS (Extension) */,
+			);
+			name = "Braver Search Extension (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Braver Search Extension (macOS)";
+			productReference = CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE77FAA82D3C8C7E00B47EE3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1610;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					CE77FAC32D3C8C8000B47EE3 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					CE77FAD52D3C8C8000B47EE3 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					CE77FAE12D3C8C8000B47EE3 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					CE77FAEB2D3C8C8000B47EE3 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+				};
+			};
+			buildConfigurationList = CE77FAAB2D3C8C7E00B47EE3 /* Build configuration list for PBXProject "Braver Search" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CE77FAA72D3C8C7E00B47EE3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CE77FAC52D3C8C8000B47EE3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE77FAC32D3C8C8000B47EE3 /* Braver Search (iOS) */,
+				CE77FAD52D3C8C8000B47EE3 /* Braver Search (macOS) */,
+				CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */,
+				CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CE77FAC22D3C8C8000B47EE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FAD42D3C8C8000B47EE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FAE02D3C8C8000B47EE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FAEA2D3C8C8000B47EE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE77FAC02D3C8C8000B47EE3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FAD22D3C8C8000B47EE3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FADE2D3C8C8000B47EE3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE77FAE82D3C8C8000B47EE3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CE77FAE52D3C8C8000B47EE3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */;
+			targetProxy = CE77FAE42D3C8C8000B47EE3 /* PBXContainerItemProxy */;
+		};
+		CE77FAEF2D3C8C8000B47EE3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */;
+			targetProxy = CE77FAEE2D3C8C8000B47EE3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CE77FB132D3C8C8000B47EE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Braver Search Extension (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search.Extension";
+				PRODUCT_NAME = "Braver Search Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CE77FB142D3C8C8000B47EE3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Braver Search Extension (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search.Extension";
+				PRODUCT_NAME = "Braver Search Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CE77FB182D3C8C8000B47EE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Braver Search (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search";
+				PRODUCT_NAME = "Braver Search";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CE77FB192D3C8C8000B47EE3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Braver Search (iOS).entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search";
+				PRODUCT_NAME = "Braver Search";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CE77FB1D2D3C8C8000B47EE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Braver Search.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search.Extension";
+				PRODUCT_NAME = "Braver Search Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CE77FB1E2D3C8C8000B47EE3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Braver Search.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search.Extension";
+				PRODUCT_NAME = "Braver Search Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CE77FB222D3C8C8000B47EE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Braver Search.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search";
+				PRODUCT_NAME = "Braver Search";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CE77FB232D3C8C8000B47EE3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Braver Search.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Braver Search";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search";
+				PRODUCT_NAME = "Braver Search";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CE77FB262D3C8C8000B47EE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CE77FB272D3C8C8000B47EE3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE77FAAB2D3C8C7E00B47EE3 /* Build configuration list for PBXProject "Braver Search" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE77FB262D3C8C8000B47EE3 /* Debug */,
+				CE77FB272D3C8C8000B47EE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE77FB122D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE77FB132D3C8C8000B47EE3 /* Debug */,
+				CE77FB142D3C8C8000B47EE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE77FB172D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE77FB182D3C8C8000B47EE3 /* Debug */,
+				CE77FB192D3C8C8000B47EE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE77FB1C2D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE77FB1D2D3C8C8000B47EE3 /* Debug */,
+				CE77FB1E2D3C8C8000B47EE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE77FB212D3C8C8000B47EE3 /* Build configuration list for PBXNativeTarget "Braver Search (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE77FB222D3C8C8000B47EE3 /* Debug */,
+				CE77FB232D3C8C8000B47EE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE77FAA82D3C8C7E00B47EE3 /* Project object */;
+}

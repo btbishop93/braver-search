@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "default_locale": "en",
+
+  "name": "Braver Search",
+  "description": "Replace Safari's default search engines with Brave Search",
+  "version": "1.0",
+
+  "icons": {
+      "48": "images/icon-48.png",
+      "128": "images/icon-128.png",
+      "256": "images/icon-256.png",
+      "512": "images/icon-512.png"
+  },
+
+  "background": {
+      "scripts": ["background.js"],
+      "type": "module"
+  },
+
+  "content_scripts": [{
+      "js": [ "content.js" ],
+      "run_at": "document_start",
+      "matches": [
+          "https://www.google.com/search*",
+          "https://www.google.co.uk/search*",
+          "https://www.google.ca/search*",
+          "https://www.google.com.au/search*"
+      ]
+  }],
+
+  "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+          "48": "images/icon-48.png",
+          "128": "images/icon-128.png",
+          "256": "images/icon-256.png",
+          "512": "images/icon-512.png"
+      }
+  },
+
+  "permissions": [ "nativeMessaging" ],
+  
+  "content_security_policy": {
+      "extension_pages": "default-src 'self'; script-src 'self'; object-src 'self'"
+  }
+}

@@ -1,0 +1,241 @@
+Jon Davis: Hello, I'm Jon Davis, web technologies evangelist for the Safari and WebKit teams.
+ I'm excited to be your guide on how to build and deploy Safari extensions for iOS.
+ Now, there are a couple of different types of extensions for iOS.
+ We've had content blockers on iOS for a few years, and that's a type of extension that allows you to configure powerful rules to block resource loads.
+ But I'm here to tell you about Safari web extensions.
+ They were introduced last year on macOS Big Sur and this fall, we brought them to iOS 15 and iPadOS 15.
+ It's a type of extension that uses web technologies that works across other browsers, and our users are loving them.
+ It's the most popular category on the App Store, and they're easy to install, like any other app.
+ And that's because Safari web extensions are distributed with an app.
+ And that means you get the benefits of being on the App Store.
+ Users can discover your extensions, you can easily sell your extensions up front -- You can even take advantage of powerful features like in-app payments to unlock advanced features of your extensions or use TestFlight to run a beta program.
+ But maybe you're saying, "That's all well and good, John, but I'm a web developer, not an app developer.
+" Well, me too! And they asked me to be your guide.
+ So I'm here to help you learn Xcode, and we're going to build a new project from scratch.
+ I'm also going to touch on the privacy-preserving permissions model of Safari and how to submit your extension with some tips on sailing through that App Review process.
+ So let's get started working with Xcode.
+ And to do that, we'll need to download and install it from the App Store.
+ I'm going to launch the App Store, and in Search I'll type "Xcode" and it comes up just about right away.
+ And then all you need to do is click the Get button and then click Install.
+ Now, it is a sizeable download that'll take a while but when you're able to launch it, Xcode will prompt you to install Command Line Tools.
+ If you skipped installing them, you can easily do that later from the command line in Terminal.
+ You'll just need to type "xcode-select" and add the install flag, and that'll kick off the install process.
+ Now, my environment is ready to go, so I won't run this command now, but you'll want to make sure you have them installed because they include an important tool called the Safari web extension converter.
+ It's useful if you've written a web extension for another browser or one you've written for Safari on macOS that you'd like to upgrade with support for Safari on iOS.
+ Now I have a simple demo web extension in my Documents folder and this hello-world extension is written for another browser, and it simply shows a "Hello World" message in a pop-up.
+ Now I can use the converter tool to upgrade it to work with iOS.
+ In Terminal, just type "xc", as in Xcode -- so that's "xcrun".
+ And then "safari-web-extension-converter" and a path to the project.
+ If you have an extension written for Safari on macOS, you can also upgrade it using the converter tool.
+ Just type "xcrun safari-web-extension-converter" and add the rebuild-project flag followed by the path to the macOS extension.
+ But let's actually see what the convertor tool does when we run it on the Hello World extension.
+And pressing Return, it begins the process.
+ And what it's actually doing is wrapping our extension into an app project that we can compile and run for iOS and macOS.
+ Now, switching back to the Terminal for a moment, I want to point out this note that has a warning here, showing that iOS extensions require nonpersistent background pages.
+ This is actually really great because it's basically giving us a to-do list of the things we'll need to check to make sure our extension will work for iOS.
+ Let's get back into Xcode.
+ This extension is almost ready.
+ The background script is already set up to run in a nonpersistent way.
+ We just need to tell Safari to run it that way.
+ So all I need to do to get this to work for iOS is to edit the manifest file.
+ And in the background section, I'll add the persistent key with a value of false.
+ And that's it! Let's try running this in the simulator.
+ I'm going to use the Build Targets menu and choose iPhone 13 Pro.
+ Now, I have a lot of simulators installed already, but you may need to use the Add Additional Simulators to download the ones you'd like to test in.
+ So I'll select iPhone 13 Pro and click the build and run button; the one that looks like a play button.
+ And this is going to build our app and launch it in the simulator.
+ You can see the status here in the upper-right of the status bar.
+ Now, switching to the simulator, I'll need to wait until the app gets installed and launches.
+Once it's launched, I can switch over to the Settings app, find the Safari section, and tap on Extensions, and then turn on our Hello World extension.
+ Now we can try it out in Safari.
+ Launch Safari and tap the Aa menu.
+ There, you'll find the Hello World extension, and I can tap on it, and it prompts for permission.
+ I'll talk more about that later, but for now, I'll select Allow For One Day.
+ And there we go.
+ A "Hello World!" message in a pop-up.
+ And that's how easy it is for you to convert a web extension written for another browser.
+ So I had an idea for a project to build a preview of Open Graph metadata; the same metadata that's used to show previews on social media sites like Twitter.
+ You get this nice image, a title, and description of the web page.
+ And so, I'd like to build an extension that can preview that data using a pop-up.
+ So that's what we're going to build today.
+ So let's start by creating a new project in Xcode.
+ I'll select Safari Extension App under Multiplatform and click Next.
+ For the product name I'm going to use "Open Graph Preview.
+" It already has my team filled in and an organization identifier using the reverse domain convention.
+ I'll leave the language as Swift and click Next.
+ Now it's asking for a place to save the project -- the desktop will work fine -- and I'm going to leave the "Create Git repository on Mac" enabled -- I love having version control built in -- and I'll click Create.
+ And this will generate the project for us from the template.
+ Now, before we go any further, let me give you a brief overview of Xcode.
+ On the left side of the window is the navigation sidebar with all of the resources for your project organized for you.
+ In the center is the main editor for the files you select from the navigator sidebar and then the right is an inspector sidebar that changes based on the file you're editing.
+ We're not going to need the inspector sidebar so I'm going to go ahead and hide it so that we have a little bit more room to work with.
+ Now let's take a look at the files that make up a new Safari web extension project, and at the top of the navigator sidebar is the project file.
+ When you select it, it opens the main editor to a configuration option screen for the project.
+ Now below that is the Shared (App) folder, and this has the resources for the app launch screen.
+ When you click the disclosure triangle next to the Resources folder, you'll see it's just web resources.
+ In fact, it's just an HTML file that you can edit, and the template sets you up to easily customize the markup, the styles, and the script.
+ The Shared (Extensions) folder has all of the resources for our extension.
+ And then when you expand the Resources folder, you'll see all the familiar files for a web extension.
+ The manifest is here, the background script, the content script, and the pop-up files.
+ The iOS (App) and macOS (App) folders have platform-specific resources and then below that the iOS (Extension) and macOS (Extension) folders have extension-specific resources for those platforms.
+ We're not going to need to worry about them for this project, so I'm going to go ahead and put them away because all of our work will be in the Shared (Extension) files.
+ And let's start in the manifest file.
+ And you can see that the template provides everything we need to get started, including filling out the name and description from the project information.
+ Below that, it specifies some default icons; you'll want to remember to provide your own for your project.
+And then here, it provides a background script, and you can see it's already set up to run the background script in a nonpersistent way.
+ Now, for this project, we're actually not going to need the background script, so I'm going to go ahead and remove this entry from the manifest file and go ahead and remove the background script itself and move that to the trash.
+ Next, it sets up the content script, and here is where it declares the JavaScript file and the domain pattern for the website it can be injected on.
+ Now, I want this tool to be usable on any site the user wants to use it on, so I'm actually going to change the "example.
+com" here to an asterisk so it can match any domain.
+ Below that, it declares the browser action section and here we define a "popup" file and then a set of default toolbar icons -- again, you'll want to remember to supply your own for your project.
+ And finally, we have the permissions key, where I'm going to add activeTab as a permission we're going to use.
+ Why activeTab? I'm so glad you asked.
+Let's take a quick look at the different permissions extensions can use.
+ The extensions model in Safari is set up to put users in control.
+ It doesn't work without user interaction first, and so they're badged on first use to help train users.
+ Permissions are granted per website, and that means website permissions will show up in Safari's settings and preferences for users to control.
+ Now, there are four fun flavors of permissions to look at.
+ Let's go through each.
+ The first type of permission is the script injection permission.
+ This allows you to inject JavaScript and even style sheets into the page a user is browsing, based on the domains of websites listed in the matches key.
+ Extensions injecting scripts get badged in the toolbar when the website the user is browsing matches the pattern in the matches key.
+ The user will need to click the extension to enable it.
+ And it's always just sitting there, waiting to be enabled by the user.
+ The next type of permission is the implicit permission.
+ Now, there are a couple of different types of implicit permissions declared in the manifest file.
+ The first that I have highlighted here are nonsensitive, which doesn't require any extra privileges.
+ And the second type are sensitive permissions because they have a website-identifying data, and this is one of the ways that we protect user privacy.
+ When you call an API, it waits for a callback with the data.
+ Users get prompted after interacting with the extension, and they'll have about a minute to respond.
+ When they approve it, the callback gets fulfilled and the data is given back.
+ Anything they've already approved gets fulfilled just about right away.
+ The next type of permission is the explicit permission, and this is explicit because the extension itself is requesting permission.
+ A prompt is always shown modally, and it's not badged because it's the extension itself requesting permission, not the user.
+ And the last type of permission is the active tab permission.
+ This is a special case where if you want to avoid alerts, active tab is the answer.
+ Users will need to interact with the extension via the toolbar, or on Mac they can use a keyboard shortcut or a contextual menu.
+ This grants a tabs permission for the current domain in the current tab.
+ And that's the one we want to use today.
+ Now let's move on to coding the content script.
+ And the content script template is set up to send and listen for messages.
+ Now, we won't need to send a message from the content script, but we will need to listen for one.
+ The first thing we need our content script to do is to grab the Open Graph metadata from the page the user is browsing, and we can just use some simple DOM API to find the right meta tags for the OG title, description, and image.
+ Now, the way the extension will work, the user will tap on the extension to open the pop-up and it will be the pop-up script's job to ask the content script for the Open Graph data from the current page.
+ So in this listener callback, we want to listen for a message with the magic word.
+ Now, if we get a message without the magic word, then we're just not going to do anything.
+ In fact, we'll just return void here.
+ But if we do get a message with the magic word, then we'll send back the data from the meta tags.
+ And that's all we need to do in the content script.
+ So let's move on to setting up our pop-up, and we'll start in the pop-up HTML file.
+ You can see the style sheet and the JavaScript for the pop-up are included right here.
+ So for web developers, you're going to feel right at home.
+ Now for our markup in this file, we just need to set up some placeholder elements for our title and description and image previews.
+ So now we have a placeholder element for the title, and for the description, and for our image.
+Next, will make some adjustments to our pop-up's style sheet.
+ Here, I only need to make a few minor adjustments to make it look great on all platforms.
+ And last, I just need to set up a responsive design layout for the images to fill the space and maintain aspect ratio.
+ Finally, we come to the heart of the extension by editing the popup script, and first we need to grab a reference to those placeholder elements we defined in our popup HTML file.
+ Next, we need to send a message to the content script and to do that, we need to query for the active tab.
+ So to query for the active tab in the current window, we'll use the tabs.
+query API.
+ And in the tabs.
+query API, we'll filter by active tab in the current window.
+ Once we have the correct tab, we can now send the message.
+ And in sending the message, we'll pass the current tabs ID and of course, our magic word.
+ Then when we get the response, we simply need to update our placeholder elements with the data.
+ That's it! Now, let's try running our extension in the simulator.
+ Again, from the Target menu, I'll select iPhone 13 Pro simulator.
+ I'll click the build and run button to kick off the process and switch to the simulator, where I'll wait for the app to launch.
+ Once it's launched, I can enable our new extension in the Settings app.
+ So let's switch to Settings and scroll to Safari.
+ Then tap it and tap Extensions, and under Open Graph Preview I can toggle it on.
+ Now let's launch Safari and I'll tap the Aa menu.
+ And there in the menu is Open Graph Preview.
+ Now, when I tap on this, I get a permission request for the content script.
+ I'll select Allow For One Day.
+ And bingo, we have a preview of this page's open graph data.
+ Now let's try it on another page.
+ Again from the Aa menu, I'll tap Open Graph Preview and Allow For One Day.
+ And there we have it, but that's not quite right.
+ We shouldn't have a broken image.
+ So to figure out what's going on here, I can use Web Inspector in Safari.
+ If you haven't enabled it, go to Safari Preferences and under the Advanced tab enable Show Develop menu in the menu bar.
+ Then from the Develop menu, you can select Web Inspector for the content from the simulator.
+ And when I do that, I can easily see that the image did not load.
+ So if the URL is wrong, that's probably coming from the content.
+ So let's open another Web Inspector for webkit.
+org.
+Now I can search for the og meta tag data.
+ And here I can see we have a title, and we have a description -- Ah, but we're missing the image.
+ And that's what's going on.
+ We have an undefined case we're not handling.
+ So back in Xcode, all we need to do is handle that undefined case.
+ Now I can try running this again.
+ Clicking the Build and Run button, I'll click Replace to replace it on the simulator, and once it launches on the simulator, I can jump back into Safari and try it again.
+From the Aa menu, I'll select Open Graph Preview and bingo.
+ Perfect! It shows the title and description, but we should make sure it works on a page that does have an image, and it does.
+ Perfect! Well, getting it to work in the simulator is a great way to test on a number of devices, but it's always a good idea to test on a real device.
+ So I have an iPhone handy.
+ Back in Xcode, I'll select the Target menu and choose the iPhone.
+ Now let's build and run and launch it on this device.
+After it's running on the device and launches, I'll need to enable it in Settings.
+ So let's switch back to the Settings app.
+ Under Safari and Extensions and Open Graph Preview, we'll toggle it on.
+ Now, launching Safari again, I'll tap the Aa menu.
+ And I can see the extension and tap it, and Allow For One Day.
+ And it works perfect.
+ Let's try this on a few other pages to make sure we have all of the cases working.
+ Here on developer.
+apple.
+com it didn't prompt for extra permission because it's part of the apple.
+com domain.
+ Let's try on webkit.
+org.
+And here we'll tap the Aa menu again and Open Graph Preview and again it prompts because this is a different website.
+ Perfect.
+ And one more on the post with an image.
+ We'll tap Aa, Open Graph Preview.
+ Perfect! So, excellent.
+ Now that we have our app and extension working in the simulator and a real device, I'd say we're ready to submit this to the App Store.
+ First, there's a quick detail to take care of before submitting.
+ In your project settings, select your iOS app target and be sure to set an App Category.
+ I'll select Developer Tools.
+ Next, from the Product menu, select Archive.
+ And similar to the build process, you'll see the progress in the right side of the status bar.
+ When it's ready, select the build archive you're ready to submit, and click the Distribute App button.
+ From the assistant, under method of distribution we'll select App Store Connect and click Next.
+ For destination, I'll leave Upload and click Next.
+ And it will begin to communicate with App Store Connect to prepare an app record.
+Here I can review the name and make sure my SKU is unique among SKUs used for other apps in my App Store Connect account.
+ Now I'll click the Next button, and it begins to prepare our app record for review.
+ First, though, there are some distribution options that it will ask for.
+ These are all very helpful, so I'm going to leave them and click Next.
+ And I definitely want to keep Automatically manage signing and click Next.
+ Now we'll get a chance to review the app content and the extension content.
+ When we're happy with it, I'll click Upload.
+ While we wait for the upload to complete, let's take a quick look at some tips for getting through App Store Review.
+ First, make sure you own all the code and any content, images, or other assets used in your project.
+ Ensure you have or can prove permission for any APIs or JavaScript frameworks that are called.
+ You'll also want to remember to provide a custom icon and use a unique name for your app -- help it to stand out on the App Store.
+ And don't just decorate the web with emojis.
+ The best web extensions -- the ones that get featured -- provide something useful to the user.
+ And if you have code for any web payments or donations for another browser, you'll need to disable it for App Store Review.
+ Upfront sales of extensions are easy and wildly popular in the App Store.
+ Let's check on that upload process.
+ The upload completed successfully.
+ Great.
+ Now in Safari, I can log in to App Store Connect and click on My Apps to see the new app record that's been created.
+ And clicking on Open Graph Preview, I can provide some additional information for the App Store.
+ You'll want to provide some preview images for your app.
+ And then under Promotional Text you should provide some descriptive information about what's new in this release.
+ Under Description, you'll want to provide a complete description of what this extension does for your users and then you can also supply some keywords.
+ Note the hundred-character limit; you'll need to be precise.
+ You'll also want to provide a URL specifically for a page where users can get support for your extension.
+ And optionally, you can include an address for a marketing page.
+ Then you'll use the upload tools to select the correct upload for your app.
+ And once you have all of that filled out, you can click the Submit For Review button to begin the App Review process.
+ And that's how easy it is to build and submit Safari web extensions.
+ We encourage you to submit your extensions for both iOS and MacOS and check out the resources associated with this session.
+ And be sure to file feedback; we'd love to hear from you.
+ You can use Feedback Assistant to file bugs or make feature requests.
+ And thanks for watching.
