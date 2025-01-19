@@ -41,11 +41,11 @@ struct MainView: View {
                 } header: {
                     Text("Settings")
                 } footer: {
-                    Text("When enabled, searches from Safari will be redirected to Brave Search")
+                    Text("When enabled, searches from Safari with Google, DuckDuckGo, or Bing will be redirected to Brave Search")
                 }
                 
                 Section {
-                    Link("Open Safari Settings", destination: URL(string: "App-Prefs:root=SAFARI")!)
+                    Link("Open Settings", destination: URL(string: "App-Prefs:root=SAFARI")!)
                         .foregroundColor(.blue)
                 } header: {
                     Text("Safari Settings")

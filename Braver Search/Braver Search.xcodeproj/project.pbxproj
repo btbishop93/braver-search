@@ -111,12 +111,10 @@
 			membershipExceptions = (
 				Resources/_locales,
 				Resources/background.js,
-				Resources/content.js,
 				Resources/images,
 				Resources/manifest.json,
 				Resources/popup.css,
 				Resources/popup.html,
-				Resources/popup.js,
 				SafariWebExtensionHandler.swift,
 			);
 			target = CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */;
@@ -126,12 +124,10 @@
 			membershipExceptions = (
 				Resources/_locales,
 				Resources/background.js,
-				Resources/content.js,
 				Resources/images,
 				Resources/manifest.json,
 				Resources/popup.css,
 				Resources/popup.html,
-				Resources/popup.js,
 				SafariWebExtensionHandler.swift,
 			);
 			target = CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */;
