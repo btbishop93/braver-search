@@ -58,8 +58,6 @@
 		CE77FAD62D3C8C8000B47EE3 /* Braver Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Braver Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE77FAE22D3C8C8000B47EE3 /* Braver Search Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Braver Search Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Braver Search Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE77FB7A2D3C980A00B47EE3 /* Braver Search Extension (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Braver Search Extension (iOS).entitlements"; sourceTree = "<group>"; };
-		CE77FB7B2D3C983A00B47EE3 /* Braver Search (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Braver Search (iOS).entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -229,8 +227,6 @@
 		CE77FAA72D3C8C7E00B47EE3 = {
 			isa = PBXGroup;
 			children = (
-				CE77FB7B2D3C983A00B47EE3 /* Braver Search (iOS).entitlements */,
-				CE77FB7A2D3C980A00B47EE3 /* Braver Search Extension (iOS).entitlements */,
 				CE77FAAC2D3C8C7F00B47EE3 /* Shared (App) */,
 				CE77FAB52D3C8C7F00B47EE3 /* Shared (Extension) */,
 				CE77FAC62D3C8C8000B47EE3 /* iOS (App) */,
@@ -472,7 +468,7 @@
 		CE77FB132D3C8C8000B47EE3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "Braver Search Extension (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "iOS (Extension)/Braver Search.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A947N6H5GS;
@@ -504,7 +500,7 @@
 		CE77FB142D3C8C8000B47EE3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "Braver Search Extension (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "iOS (Extension)/Braver Search.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A947N6H5GS;
@@ -539,7 +535,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Braver Search (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "iOS (App)/Braver Search.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A947N6H5GS;
@@ -577,7 +573,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Braver Search (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "iOS (App)/Braver Search.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A947N6H5GS;
