@@ -143,7 +143,5 @@ We love contributions! Here's how:
 
 For feature requests or inquiries:
 - Email: btbishop93@gmail.com
-- App Store: [App Store Developer Profile]
-- Support: support@braversearch.com
 - GitHub Issues: For bugs and improvements
  
