@@ -2,18 +2,34 @@
 
 console.log("Braver Search: Background script loaded");
 
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    console.log("Braver Search: Tab updated", { 
-        tabId, 
-        changeInfo, 
-        tab,
-        platform: navigator.platform,
+// Function to check if redirect is enabled
+async function isRedirectEnabled() {
+    try {
+        const result = await browser.storage.local.get('enabled');
+        console.log("Braver Search: Redirect enabled?", result.enabled);
+        return result.enabled || false;
+    } catch (error) {
+        console.error("Braver Search: Failed to get enabled state", error);
+        return false;
+    }
+}
+
+browser.webNavigation.onBeforeNavigate.addListener(async (details) => {
+    console.log("Braver Search: Navigation detected", { 
+        details,
         userAgent: navigator.userAgent
     });
     
-    if (changeInfo.url) {
-        console.log("Braver Search: URL changed", changeInfo.url);
-        const url = new URL(changeInfo.url);
+    // First check if redirect is enabled
+    const enabled = await isRedirectEnabled();
+    if (!enabled) {
+        console.log("Braver Search: Redirect is disabled, skipping");
+        return;
+    }
+    
+    if (details.url) {
+        console.log("Braver Search: URL detected", details.url);
+        const url = new URL(details.url);
         
         // Skip if already on Brave Search
         if (url.hostname === 'search.brave.com') {
@@ -30,31 +46,17 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         });
         
         if (searchQuery) {
-            console.log("Braver Search: Sending native message");
-            browser.runtime.sendNativeMessage("xyz.bsquared.braversearch", {})
-                .then(response => {
-                    console.log("Braver Search: Native message response received", response);
-                    const settings = JSON.parse(response);
-                    console.log("Braver Search: Parsed settings", settings);
-                    
-                    if (settings.enabled) {
-                        const searchUrl = settings.searchUrl || "https://search.brave.com/search?q=";
-                        const redirectUrl = searchUrl + encodeURIComponent(searchQuery);
-                        console.log("Braver Search: Attempting redirect to", redirectUrl);
-                        browser.tabs.update(tabId, { url: redirectUrl })
-                            .then(() => console.log("Braver Search: Redirect successful"))
-                            .catch(error => console.error("Braver Search: Redirect failed", error));
-                    } else {
-                        console.log("Braver Search: Extension is disabled in settings");
-                    }
-                })
-                .catch(error => {
-                    console.error("Braver Search: Native message error", error);
-                });
+            const searchUrl = "https://search.brave.com/search?q=";
+            const redirectUrl = searchUrl + encodeURIComponent(searchQuery);
+            console.log("Braver Search: Attempting redirect to", redirectUrl);
+            
+            browser.tabs.update(details.tabId, { url: redirectUrl })
+                .then(() => console.log("Braver Search: Redirect successful"))
+                .catch(error => console.error("Braver Search: Redirect failed", error));
         } else {
             console.log("Braver Search: No search query found in URL");
         }
     } else {
-        console.log("Braver Search: No URL change in this update", changeInfo);
+        console.log("Braver Search: No URL in navigation details", details);
     }
 }); 

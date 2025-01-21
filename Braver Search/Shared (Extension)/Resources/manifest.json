@@ -14,7 +14,8 @@
     },
 
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["background.js"],
+        "type": "module"
     },
 
     "action": {
@@ -29,10 +30,19 @@
 
     "permissions": [
         "tabs",
-        "nativeMessaging"
+        "webNavigation",
+        "storage"
     ],
     
-    "content_security_policy": {
-        "extension_pages": "default-src 'self'; script-src 'self'; object-src 'self'"
-    }
+    "host_permissions": [
+        "*://*.google.com/*",
+        "*://*.google.co.uk/*",
+        "*://*.google.ca/*",
+        "*://*.google.com.au/*",
+        "*://*.bing.com/*",
+        "*://*.duckduckgo.com/*",
+        "*://search.yahoo.com/*",
+        "*://*.yandex.com/*",
+        "*://search.brave.com/*"
+    ]
 } 

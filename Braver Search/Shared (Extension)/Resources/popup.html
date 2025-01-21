@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="popup.css">
+    <script type="module" src="popup.js"></script>
 </head>
 <body>
-    <ol>
-        <li>Allow Braver Search in extension settings</li><br>
-        <li>Your Safari searches for Google, DuckDuckGo, or Bing will now use Brave Search!</li>
-    </ol>
+    <div class="container">
+        <h2>Brave Search Redirect</h2>
+        <div class="toggle-container">
+            <label class="toggle">
+                <input type="checkbox" id="toggleButton">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="status">
+            <span class="status-dot"></span>
+            <span class="status-text">Enabled</span>
+        </div>
+        <p class="description">If enabled, Safari searches will be redirected to Brave Search</p>
+    </div>
 </body>
 </html> 

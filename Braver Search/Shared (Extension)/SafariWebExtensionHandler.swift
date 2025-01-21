@@ -13,11 +13,43 @@ struct Settings: Encodable {
     let searchUrl: String
 }
 
+struct Message: Decodable {
+    let type: String
+    let enabled: Bool?
+}
+
 class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
     func beginRequest(with context: NSExtensionContext) {
         NSLog("Braver Search: Begin request")
         
         let userDefaults = UserDefaults(suiteName: "group.xyz.bsquared.braversearch")!
+        var currentEnabled = userDefaults.bool(forKey: "enabled")
+        
+        // Parse incoming message
+        if let item = context.inputItems.first as? NSExtensionItem,
+           let userInfo = item.userInfo,
+           let json = userInfo[SFExtensionMessageKey] as? String {
+            NSLog("Braver Search: Received message: %@", json)
+            
+            if let data = json.data(using: .utf8),
+               let message = try? JSONDecoder().decode(Message.self, from: data) {
+                NSLog("Braver Search: Message type: %@", message.type)
+                
+                switch message.type {
+                case "setState":
+                    if let newState = message.enabled {
+                        NSLog("Braver Search: Setting new state: %@", String(describing: newState))
+                        userDefaults.set(newState, forKey: "enabled")
+                        userDefaults.synchronize()
+                        currentEnabled = newState
+                    }
+                case "getState":
+                    NSLog("Braver Search: Getting current state")
+                default:
+                    NSLog("Braver Search: Unknown message type")
+                }
+            }
+        }
         
         #if os(macOS)
         // On macOS, check Safari's extension state
@@ -31,15 +63,9 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
             
             if let state = state {
                 NSLog("Braver Search: Extension enabled in Safari: %@", String(describing: state.isEnabled))
-                userDefaults.set(state.isEnabled, forKey: "enabled")
-                userDefaults.synchronize()
             }
         }
         #endif
-        
-        // Get current state (on iOS this is set by the app, on macOS by Safari)
-        let currentEnabled = userDefaults.bool(forKey: "enabled")
-        NSLog("Braver Search: Current enabled state: %@", String(describing: currentEnabled))
         
         let settings = Settings(
             enabled: currentEnabled,
