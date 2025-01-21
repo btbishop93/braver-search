@@ -138,6 +138,23 @@ input:checked + .slider:before {
     line-height: 1.3;
 }
 
+.disclaimer {
+    margin: 4px 0;
+    font-size: 10px;
+    text-align: center;
+    color: var(--description-color);
+    opacity: 0.8;
+}
+
+.disclaimer a {
+    color: var(--button-bg-active);
+    text-decoration: none;
+}
+
+.disclaimer a:hover {
+    text-decoration: underline;
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
         --text-color: #fff;
