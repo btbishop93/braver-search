@@ -12,8 +12,8 @@ A Safari extension that automatically redirects searches to Brave Search, provid
 > Commercial distribution is restricted to the original author.
 
 ## Support the Project
-- 🏪 [![App Store](https://img.shields.io/badge/Download-App%20Store-blue.svg?style=flat-square&logo=app-store)](https://apps.apple.com/app/idYOUR_APP_ID) - One-time purchase ($4.99)
-- ☕ [![Buy Me A Coffee](https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-yellow.svg?style=flat-square&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/btbishop93) - Support development
+- [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow.svg?style=flat&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/btbishop93)
+- [![App Store](https://img.shields.io/badge/Download%20on%20the-App%20Store-blue.svg?style=flat&logo=app-store&logoColor=white)](https://apps.apple.com/app/idYOUR_APP_ID)
 - ⭐ Star this repository
 - 🐛 Report bugs and contribute fixes
 
