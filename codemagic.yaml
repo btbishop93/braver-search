@@ -26,25 +26,6 @@ workflows:
       - name: Set up keychain
         script: |
           keychain initialize
-      - name: Fetch iOS signing files
-        script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create
-          app-store-connect fetch-signing-files "$EXTENSION_BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create
-      - name: Fetch macOS signing files
-        script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type MAC_APP_STORE \
-            --create
-          app-store-connect fetch-signing-files "$EXTENSION_BUNDLE_ID" \
-            --type MAC_APP_STORE \
-            --create
-      - name: Set up code signing settings
-        script: |
-          xcode-project use-profiles
       - name: Build iOS App
         script: |
           xcode-project build-ipa \
