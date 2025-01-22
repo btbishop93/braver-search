@@ -9,11 +9,11 @@ workflows:
         XCODE_PROJECT: "Braver Search/Braver Search.xcodeproj"
         XCODE_SCHEME_IOS: "Braver Search (iOS)"
         XCODE_SCHEME_MACOS: "Braver Search (macOS)"
-        BUNDLE_ID: "xyz.bsquared.braversearch"
+        BUNDLE_ID: "xyz.bsquared.Braver-Search"
       xcode: latest
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: xyz.bsquared.braversearch
+        bundle_identifier: xyz.bsquared.Braver-Search
     triggering:
       events:
         - push
