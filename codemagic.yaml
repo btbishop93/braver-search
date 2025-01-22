@@ -22,13 +22,17 @@ workflows:
           echo "Setting up code signing"
           keychain initialize
     
-    code_signing:
+    signing:
       ios:
-        type: app_store
-        bundle_identifier: xyz.bsquared.braversearch
-      mac:
-        type: app_store
-        bundle_identifier: xyz.bsquared.braversearch
+        provisioning_profiles:
+          - profile_name
+        certificates:
+          - certificate_name
+      macos:
+        provisioning_profiles:
+          - profile_name
+        certificates:
+          - certificate_name
     
     publishing:
       app_store_connect:
