@@ -38,7 +38,7 @@ jobs:
         xcodebuild test \
           -project "Braver Search.xcodeproj" \
           -scheme "Braver Search macOS Tests" \
-          -destination 'platform=macOS,variant=Mac Catalyst' \
+          -destination 'platform=macOS-latest,arch=arm64' \
           -enableCodeCoverage YES
           
     - name: Upload Coverage
