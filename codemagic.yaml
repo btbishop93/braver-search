@@ -5,9 +5,6 @@ workflows:
     integrations:
       app_store_connect: braver_search_credentials
     environment:
-      groups:
-        - app_store_credentials
-        - certificate_credentials
       vars:
         XCODE_PROJECT: "Braver Search/Braver Search.xcodeproj"
         XCODE_SCHEME_IOS: "Braver Search (iOS)"
@@ -15,6 +12,12 @@ workflows:
         BUNDLE_ID: "xyz.bsquared.Braver-Search"
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
       xcode: latest
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: xyz.bsquared.Braver-Search
+      macos_signing:
+        distribution_type: app_store
+        bundle_identifier: xyz.bsquared.Braver-Search
     triggering:
       events:
         - push
@@ -26,13 +29,22 @@ workflows:
       - name: Set up keychain
         script: |
           keychain initialize
-      - name: Fetch signing files
+      - name: Fetch iOS signing files
         script: |
-          app-store-connect fetch-signing-files $BUNDLE_ID --type IOS_APP_STORE --create
-          app-store-connect fetch-signing-files $EXTENSION_BUNDLE_ID --type IOS_APP_STORE --create
-      - name: Add certificates to keychain
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+          app-store-connect fetch-signing-files "$EXTENSION_BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      - name: Fetch macOS signing files
         script: |
-          keychain add-certificates
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type MAC_APP_STORE \
+            --create
+          app-store-connect fetch-signing-files "$EXTENSION_BUNDLE_ID" \
+            --type MAC_APP_STORE \
+            --create
       - name: Set up code signing settings
         script: |
           xcode-project use-profiles
