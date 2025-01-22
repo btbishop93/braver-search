@@ -23,12 +23,22 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: List Provisioning Profiles
+      - name: List initial profiles
         script: |
+          echo "Initial profiles:"
           ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Set up keychain
         script: |
           keychain initialize
+      - name: Fetch extension profile
+        script: |
+          app-store-connect profile create \
+            --bundle-id "$EXTENSION_BUNDLE_ID" \
+            --platform IOS_APP_STORE \
+            --type IOS_APP_STORE \
+            --name "Braver Search iOS Extension App Store"
+          echo "After creating extension profile:"
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Set up code signing settings
         script: |
           xcode-project use-profiles
