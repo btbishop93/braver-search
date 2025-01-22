@@ -14,7 +14,7 @@ workflows:
       xcode: latest
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: xyz.bsquared.Braver-Search xyz.bsquared.Braver-Search.Extension
+        bundle_identifier: xyz.bsquared.Braver-Search
     triggering:
       events:
         - push
@@ -23,6 +23,9 @@ workflows:
           include: true
           source: true
     scripts:
+      - name: List Provisioning Profiles
+        script: |
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Set up keychain
         script: |
           keychain initialize
