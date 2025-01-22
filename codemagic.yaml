@@ -5,6 +5,8 @@ workflows:
     integrations:
       app_store_connect: braver_search_credentials
     environment:
+      groups:
+        - certificate_credentials # Contains CERTIFICATE_PRIVATE_KEY
       vars:
         XCODE_PROJECT: "Braver Search/Braver Search.xcodeproj"
         XCODE_SCHEME_IOS: "Braver Search (iOS)"
@@ -34,10 +36,12 @@ workflows:
         script: |
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
-            --create
+            --create \
+            --certificate-key="$CERTIFICATE_PRIVATE_KEY"
           app-store-connect fetch-signing-files "$EXTENSION_BUNDLE_ID" \
             --type IOS_APP_STORE \
-            --create
+            --create \
+            --certificate-key="$CERTIFICATE_PRIVATE_KEY"
       - name: Set up code signing settings
         script: |
           xcode-project use-profiles
