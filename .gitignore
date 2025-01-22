@@ -1,3 +1,14 @@
+# Node.js / npm
+node_modules/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.env
+.env.local
+.env.*.local
+
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
@@ -5,6 +16,8 @@
 ## User settings
 xcuserdata/
 *.xcuserstate
+*.xcscmblueprint
+*.xccheckout
 
 ## App packaging
 *.ipa
@@ -96,6 +109,12 @@ Temporary Items
 .vscode/
 *.swp
 *.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
 
 # Build generated
 build/
@@ -108,4 +127,14 @@ DerivedData/
 *.mode2v3
 !default.mode2v3
 *.perspectivev3
-!default.perspectivev3 
+!default.perspectivev3
+*.hmap
+
+# Test results
+junit.xml
+test-results/
+coverage-report/
+
+# Logs
+logs
+*.log 

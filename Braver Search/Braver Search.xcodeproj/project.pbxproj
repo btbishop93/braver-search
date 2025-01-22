@@ -26,6 +26,34 @@
 			remoteGlobalIDString = CE77FAEB2D3C8C8000B47EE3;
 			remoteInfo = "Braver Search Extension (macOS)";
 		};
+		CEE6B2D62D405BAE003F51F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE77FAA82D3C8C7E00B47EE3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE77FAD52D3C8C8000B47EE3;
+			remoteInfo = "Braver Search (macOS)";
+		};
+		CEE6B2DB2D405C2E003F51F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE77FAA82D3C8C7E00B47EE3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE77FAE12D3C8C8000B47EE3;
+			remoteInfo = "Braver Search Extension (iOS)";
+		};
+		CEE6B2DD2D405C36003F51F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE77FAA82D3C8C7E00B47EE3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE77FAEB2D3C8C8000B47EE3;
+			remoteInfo = "Braver Search Extension (macOS)";
+		};
+		CEE6B2E92D4067FB003F51F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE77FAA82D3C8C7E00B47EE3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE77FAC32D3C8C8000B47EE3;
+			remoteInfo = "Braver Search (iOS)";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,6 +86,8 @@
 		CE77FAD62D3C8C8000B47EE3 /* Braver Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Braver Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE77FAE22D3C8C8000B47EE3 /* Braver Search Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Braver Search Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Braver Search Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEE6B2C52D405B95003F51F9 /* Braver Search iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Braver Search iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEE6B2D22D405BAE003F51F9 /* Braver Search macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Braver Search macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -188,6 +218,16 @@
 			path = "macOS (Extension)";
 			sourceTree = "<group>";
 		};
+		CEE6B2C62D405B95003F51F9 /* Braver Search iOS Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Braver Search iOS Tests";
+			sourceTree = "<group>";
+		};
+		CEE6B2D32D405BAE003F51F9 /* Braver Search macOS Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Braver Search macOS Tests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +259,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CEE6B2C22D405B95003F51F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEE6B2CF2D405BAE003F51F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -231,6 +285,8 @@
 				CE77FAD72D3C8C8000B47EE3 /* macOS (App) */,
 				CE77FAE62D3C8C8000B47EE3 /* iOS (Extension) */,
 				CE77FAF02D3C8C8000B47EE3 /* macOS (Extension) */,
+				CEE6B2C62D405B95003F51F9 /* Braver Search iOS Tests */,
+				CEE6B2D32D405BAE003F51F9 /* Braver Search macOS Tests */,
 				CE77FAC52D3C8C8000B47EE3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -242,6 +298,8 @@
 				CE77FAD62D3C8C8000B47EE3 /* Braver Search.app */,
 				CE77FAE22D3C8C8000B47EE3 /* Braver Search Extension.appex */,
 				CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */,
+				CEE6B2C52D405B95003F51F9 /* Braver Search iOS Tests.xctest */,
+				CEE6B2D22D405BAE003F51F9 /* Braver Search macOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -341,6 +399,54 @@
 			productReference = CE77FAEC2D3C8C8000B47EE3 /* Braver Search Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		CEE6B2C42D405B95003F51F9 /* Braver Search iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEE6B2CD2D405B95003F51F9 /* Build configuration list for PBXNativeTarget "Braver Search iOS Tests" */;
+			buildPhases = (
+				CEE6B2C12D405B95003F51F9 /* Sources */,
+				CEE6B2C22D405B95003F51F9 /* Frameworks */,
+				CEE6B2C32D405B95003F51F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEE6B2EA2D4067FB003F51F9 /* PBXTargetDependency */,
+				CEE6B2DC2D405C2E003F51F9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CEE6B2C62D405B95003F51F9 /* Braver Search iOS Tests */,
+			);
+			name = "Braver Search iOS Tests";
+			packageProductDependencies = (
+			);
+			productName = "Braver Search iOS Tests";
+			productReference = CEE6B2C52D405B95003F51F9 /* Braver Search iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CEE6B2D12D405BAE003F51F9 /* Braver Search macOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEE6B2D82D405BAE003F51F9 /* Build configuration list for PBXNativeTarget "Braver Search macOS Tests" */;
+			buildPhases = (
+				CEE6B2CE2D405BAE003F51F9 /* Sources */,
+				CEE6B2CF2D405BAE003F51F9 /* Frameworks */,
+				CEE6B2D02D405BAE003F51F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEE6B2DE2D405C36003F51F9 /* PBXTargetDependency */,
+				CEE6B2D72D405BAE003F51F9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CEE6B2D32D405BAE003F51F9 /* Braver Search macOS Tests */,
+			);
+			name = "Braver Search macOS Tests";
+			packageProductDependencies = (
+			);
+			productName = "Braver Search macOS Tests";
+			productReference = CEE6B2D22D405BAE003F51F9 /* Braver Search macOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -363,6 +469,14 @@
 					CE77FAEB2D3C8C8000B47EE3 = {
 						CreatedOnToolsVersion = 16.1;
 					};
+					CEE6B2C42D405B95003F51F9 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = CE77FAC32D3C8C8000B47EE3;
+					};
+					CEE6B2D12D405BAE003F51F9 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = CE77FAD52D3C8C8000B47EE3;
+					};
 				};
 			};
 			buildConfigurationList = CE77FAAB2D3C8C7E00B47EE3 /* Build configuration list for PBXProject "Braver Search" */;
@@ -383,6 +497,8 @@
 				CE77FAD52D3C8C8000B47EE3 /* Braver Search (macOS) */,
 				CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */,
 				CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */,
+				CEE6B2C42D405B95003F51F9 /* Braver Search iOS Tests */,
+				CEE6B2D12D405BAE003F51F9 /* Braver Search macOS Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -410,6 +526,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CE77FAEA2D3C8C8000B47EE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEE6B2C32D405B95003F51F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEE6B2D02D405BAE003F51F9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -447,6 +577,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CEE6B2C12D405B95003F51F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEE6B2CE2D405BAE003F51F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -459,6 +603,26 @@
 			isa = PBXTargetDependency;
 			target = CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */;
 			targetProxy = CE77FAEE2D3C8C8000B47EE3 /* PBXContainerItemProxy */;
+		};
+		CEE6B2D72D405BAE003F51F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE77FAD52D3C8C8000B47EE3 /* Braver Search (macOS) */;
+			targetProxy = CEE6B2D62D405BAE003F51F9 /* PBXContainerItemProxy */;
+		};
+		CEE6B2DC2D405C2E003F51F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE77FAE12D3C8C8000B47EE3 /* Braver Search Extension (iOS) */;
+			targetProxy = CEE6B2DB2D405C2E003F51F9 /* PBXContainerItemProxy */;
+		};
+		CEE6B2DE2D405C36003F51F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */;
+			targetProxy = CEE6B2DD2D405C36003F51F9 /* PBXContainerItemProxy */;
+		};
+		CEE6B2EA2D4067FB003F51F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE77FAC32D3C8C8000B47EE3 /* Braver Search (iOS) */;
+			targetProxy = CEE6B2E92D4067FB003F51F9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -851,6 +1015,85 @@
 			};
 			name = Release;
 		};
+		CEE6B2CB2D405B95003F51F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search-iOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Braver Search.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Braver Search";
+			};
+			name = Debug;
+		};
+		CEE6B2CC2D405B95003F51F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search-iOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Braver Search.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Braver Search";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CEE6B2D92D405BAE003F51F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search-macOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Braver Search.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Braver Search";
+			};
+			name = Debug;
+		};
+		CEE6B2DA2D405BAE003F51F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A947N6H5GS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.bsquared.Braver-Search-macOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Braver Search.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Braver Search";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -895,6 +1138,24 @@
 			buildConfigurations = (
 				CE77FB222D3C8C8000B47EE3 /* Debug */,
 				CE77FB232D3C8C8000B47EE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEE6B2CD2D405B95003F51F9 /* Build configuration list for PBXNativeTarget "Braver Search iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEE6B2CB2D405B95003F51F9 /* Debug */,
+				CEE6B2CC2D405B95003F51F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEE6B2D82D405BAE003F51F9 /* Build configuration list for PBXNativeTarget "Braver Search macOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEE6B2D92D405BAE003F51F9 /* Debug */,
+				CEE6B2DA2D405BAE003F51F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -8,12 +8,12 @@
 import SafariServices
 import os.log
 
-struct Settings: Encodable {
+struct Settings: Codable {
     let enabled: Bool
     let searchUrl: String
 }
 
-struct Message: Decodable {
+struct Message: Codable {
     let type: String
     let enabled: Bool?
 }
