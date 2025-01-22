@@ -1,8 +1,8 @@
 workflows:
-  ios-production:
-    name: iOS Production Build
+  app-store:
+    name: Universal App Store Build
     instance_type: mac_mini_m1
-    max_build_duration: 60
+    max_build_duration: 120
     environment:
       xcode: latest
       groups:
@@ -21,58 +21,19 @@ workflows:
         script: |
           echo "Setting up code signing"
           keychain initialize
-      - name: iOS build
-        script: |
-          cd "Braver Search"
-          xcodebuild build \
-            -project "Braver Search.xcodeproj" \
-            -scheme "Braver Search (iOS)" \
-            -configuration Release \
-            -sdk iphoneos \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            CODE_SIGNING_REQUIRED=YES \
-            CODE_SIGNING_ALLOWED=YES
-    artifacts:
-      - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-
-  macos-production:
-    name: macOS Production Build
-    instance_type: mac_mini_m1
-    max_build_duration: 60
-    environment:
-      xcode: latest
-      groups:
-        - app_store_credentials
-      vars:
-        BUNDLE_ID: "xyz.bsquared.braversearch"
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: main
-          include: true
-          source: true
-    scripts:
-      - name: Set up code signing settings
-        script: |
-          echo "Setting up code signing"
-          keychain initialize
-      - name: macOS build
-        script: |
-          cd "Braver Search"
-          xcodebuild build \
-            -project "Braver Search.xcodeproj" \
-            -scheme "Braver Search (macOS)" \
-            -configuration Release \
-            -sdk macosx \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            CODE_SIGNING_REQUIRED=YES \
-            CODE_SIGNING_ALLOWED=YES
-    artifacts:
-      - build/macos/*.app
-      - /tmp/xcodebuild_logs/*.log
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM 
+    
+    ios_signing:
+      distribution_type: app_store
+      bundle_identifier: xyz.bsquared.braversearch
+    
+    macos_signing:
+      distribution_type: app_store
+      bundle_identifier: xyz.bsquared.braversearch
+    
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_app_store: true
+        release_type: manual 
