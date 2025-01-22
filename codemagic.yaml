@@ -10,10 +10,16 @@ workflows:
         XCODE_SCHEME_IOS: "Braver Search (iOS)"
         XCODE_SCHEME_MACOS: "Braver Search (macOS)"
         BUNDLE_ID: "xyz.bsquared.Braver-Search"
+        EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
       xcode: latest
       ios_signing:
         distribution_type: app_store
         bundle_identifier: xyz.bsquared.Braver-Search
+        provisioning_profiles:
+          - bundle_identifier: xyz.bsquared.Braver-Search
+            provisioning_profile: "Braver Search iOS App Store"
+          - bundle_identifier: xyz.bsquared.Braver-Search.Extension
+            provisioning_profile: "Braver Search iOS Extension App Store"
     triggering:
       events:
         - push
@@ -31,13 +37,13 @@ workflows:
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME_IOS" \
-            --archive-flags "-destination 'generic/platform=iOS'"
+            --archive-flags "-destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=A947N6H5GS"
       - name: Build macOS App
         script: |
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME_MACOS" \
-            --archive-flags "-destination 'generic/platform=macOS'"
+            --archive-flags "-destination 'generic/platform=macOS' CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=A947N6H5GS"
     artifacts:
       - build/ios/ipa/*.ipa
       - build/macos/*.app
