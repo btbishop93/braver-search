@@ -15,6 +15,7 @@ workflows:
       groups:
         - app_store_credentials
       ios_signing:
+        distribution_type: app_store
         distribution_profile: "Braver Search iOS App Store"
         bundle_identifier: "xyz.bsquared.Braver-Search"
     triggering:
