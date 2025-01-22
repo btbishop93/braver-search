@@ -12,13 +12,12 @@ workflows:
         BUNDLE_ID: "xyz.bsquared.Braver-Search"
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
       xcode: latest
+      groups:
+        - app_store_credentials
       ios_signing:
-        profile: "app_store"
-        provisioning_profiles:
-          - bundle_identifier: xyz.bsquared.Braver-Search
-            provisioning_profile: "Braver Search iOS App Store"
-          - bundle_identifier: xyz.bsquared.Braver-Search.Extension
-            provisioning_profile: "Braver Search iOS Extension App Store"
+        profiles:
+          - "Braver Search iOS App Store"
+          - "Braver Search iOS Extension App Store"
     triggering:
       events:
         - push
