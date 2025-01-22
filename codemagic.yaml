@@ -5,6 +5,9 @@ workflows:
     integrations:
       app_store_connect: braver_search_credentials
     environment:
+      groups:
+        - app_store_credentials
+        - certificate_credentials
       vars:
         XCODE_PROJECT: "Braver Search/Braver Search.xcodeproj"
         XCODE_SCHEME_IOS: "Braver Search (iOS)"
@@ -12,12 +15,6 @@ workflows:
         BUNDLE_ID: "xyz.bsquared.Braver-Search"
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
       xcode: latest
-      groups:
-        - app_store_credentials
-      ios_signing:
-        distribution_type: app_store
-        distribution_profile: "Braver Search iOS App Store"
-        bundle_identifier: "xyz.bsquared.Braver-Search"
     triggering:
       events:
         - push
@@ -26,22 +23,29 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Install Codemagic CLI Tools
-        script: pip3 install codemagic-cli-tools
-      - name: Set up provisioning profiles
-        script: xcode-project use-profiles
+      - name: Set up keychain
+        script: |
+          keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files $BUNDLE_ID --type IOS_APP_STORE --create
+          app-store-connect fetch-signing-files $EXTENSION_BUNDLE_ID --type IOS_APP_STORE --create
+      - name: Add certificates to keychain
+        script: |
+          keychain add-certificates
+      - name: Set up code signing settings
+        script: |
+          xcode-project use-profiles
       - name: Build iOS App
         script: |
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME_IOS" \
-            --archive-flags "-destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=A947N6H5GS"
+            --scheme "$XCODE_SCHEME_IOS"
       - name: Build macOS App
         script: |
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME_MACOS" \
-            --archive-flags "-destination 'generic/platform=macOS' CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=A947N6H5GS"
+            --scheme "$XCODE_SCHEME_MACOS"
     artifacts:
       - build/ios/ipa/*.ipa
       - build/macos/*.app
