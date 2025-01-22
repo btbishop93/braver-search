@@ -9,15 +9,19 @@ on:
 jobs:
   test-swift:
     name: Swift Tests
-    runs-on: macos-latest
-    
+    runs-on: macos-14
+
     steps:
     - uses: actions/checkout@v4
     
     - name: Select Xcode
-      run: sudo xcode-select -s /Applications/Xcode.app
+      run: sudo xcode-select -s /Applications/Xcode_15.4.app
+      
+    - name: List Directory Contents
+      run: ls -la
       
     - name: Build and Test
+      working-directory: ./Braver Search
       run: |
         xcodebuild test \
           -scheme "Braver Search" \
