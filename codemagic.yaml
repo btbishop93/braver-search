@@ -13,11 +13,11 @@ workflows:
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
       xcode: latest
       ios_signing:
-        distribution_type: app_store
-        bundle_identifier: xyz.bsquared.Braver-Search
-      macos_signing:
-        distribution_type: app_store
-        bundle_identifier: xyz.bsquared.Braver-Search
+        certificates:
+          - certificate: braver_search_dist
+        provisioning_profiles:
+          - bundle_identifier: xyz.bsquared.Braver-Search
+          - bundle_identifier: xyz.bsquared.Braver-Search.Extension
     triggering:
       events:
         - push
