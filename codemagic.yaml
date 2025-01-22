@@ -14,7 +14,7 @@ workflows:
       xcode: latest
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: xyz.bsquared.Braver-Search*
+        bundle_identifier: xyz.bsquared.Braver-Search
     triggering:
       events:
         - push
@@ -36,12 +36,14 @@ workflows:
         script: |
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME_IOS"
+            --scheme "$XCODE_SCHEME_IOS" \
+            --archive-flags "-destination 'generic/platform=iOS' -allowProvisioningUpdates"
       - name: Build macOS App
         script: |
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME_MACOS"
+            --scheme "$XCODE_SCHEME_MACOS" \
+            --archive-flags "-destination 'generic/platform=macOS' -allowProvisioningUpdates"
     artifacts:
       - build/ios/ipa/*.ipa
       - build/macos/*.app
