@@ -13,11 +13,8 @@ workflows:
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
       xcode: latest
       ios_signing:
-        provisioning_profiles:
-          - bundle_identifier: xyz.bsquared.Braver-Search
-            profile: "Braver Search iOS App Store"
-          - bundle_identifier: xyz.bsquared.Braver-Search.Extension
-            profile: "Braver Search iOS Extension App Store"
+          distribution_type: app_store
+          bundle_identifier: xyz.bsquared.Braver-Search
     triggering:
       events:
         - push
@@ -56,4 +53,4 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-        expire_build_submitted_for_review: true 
+        expire_build_submitted_for_review: true
