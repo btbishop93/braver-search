@@ -22,13 +22,13 @@ workflows:
           echo "Setting up code signing"
           keychain initialize
     
-    ios_signing:
-      distribution_type: app_store
-      bundle_identifier: xyz.bsquared.braversearch
-    
-    macos_signing:
-      distribution_type: app_store
-      bundle_identifier: xyz.bsquared.braversearch
+    code_signing:
+      ios:
+        type: app_store
+        bundle_identifier: xyz.bsquared.braversearch
+      mac:
+        type: app_store
+        bundle_identifier: xyz.bsquared.braversearch
     
     publishing:
       app_store_connect:
@@ -36,4 +36,4 @@ workflows:
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_app_store: true
-        release_type: manual 
+        release_type: MANUAL 
