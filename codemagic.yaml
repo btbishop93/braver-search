@@ -14,7 +14,7 @@ workflows:
       xcode: latest
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: xyz.bsquared.Braver-Search
+        bundle_identifier: xyz.bsquared.Braver-Search*
     triggering:
       events:
         - push
