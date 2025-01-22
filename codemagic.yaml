@@ -1,14 +1,17 @@
 workflows:
   app-store:
     name: Universal App Store Build
-    instance_type: mac_mini_m1
-    max_build_duration: 120
+    instance_type: mac_mini_m2
     environment:
-      xcode: latest
-      groups:
-        - app_store_credentials
       vars:
+        XCODE_PROJECT: "Braver Search/Braver Search.xcodeproj"
+        XCODE_SCHEME_IOS: "Braver Search (iOS)"
+        XCODE_SCHEME_MACOS: "Braver Search (macOS)"
         BUNDLE_ID: "xyz.bsquared.braversearch"
+      xcode: latest
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: xyz.bsquared.braversearch
     triggering:
       events:
         - push
@@ -17,17 +20,28 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Set up code signing settings
+      - name: Install Codemagic CLI Tools
+        script: pip3 install codemagic-cli-tools
+      - name: Set up provisioning profiles
+        script: xcode-project use-profiles
+      - name: Build iOS App
         script: |
-          echo "Setting up code signing"
-          keychain initialize
-    
-    app_store_connect:
-      api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-      key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-      issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-    
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME_IOS" \
+            --archive-flags "-destination 'generic/platform=iOS'"
+      - name: Build macOS App
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME_MACOS" \
+            --archive-flags "-destination 'generic/platform=macOS'"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/macos/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
-        submit_to_app_store: true
+        auth: integration
+        submit_to_testflight: false
         release_type: MANUAL 
