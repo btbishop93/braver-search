@@ -16,8 +16,10 @@ workflows:
         certificates:
           - certificate: braver_search_dist
         provisioning_profiles:
-          - bundle_identifier: xyz.bsquared.Braver-Search
-          - bundle_identifier: xyz.bsquared.Braver-Search.Extension
+          - profile: Braver Search macOS App Store
+            bundle_identifier: xyz.bsquared.Braver-Search
+          - profile: Braver Search iOS Extension App Store
+            bundle_identifier: xyz.bsquared.Braver-Search.Extension
     triggering:
       events:
         - push
