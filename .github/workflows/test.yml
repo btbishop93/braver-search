@@ -39,7 +39,9 @@ jobs:
           -project "Braver Search.xcodeproj" \
           -scheme "Braver Search macOS Tests" \
           -destination 'platform=macOS,arch=arm64' \
-          -enableCodeCoverage YES
+          -enableCodeCoverage YES \
+          CODE_SIGN_IDENTITY="-" \
+          CODE_SIGNING_REQUIRED=NO
           
     - name: Upload Coverage
       uses: codecov/codecov-action@v3
