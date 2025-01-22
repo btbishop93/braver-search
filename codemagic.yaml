@@ -30,22 +30,31 @@ workflows:
       - name: Set up keychain
         script: |
           keychain initialize
-      - name: Get certificate ID and create profile
+      - name: Set up certificates and profiles
         script: |
-          # List certificates and get the distribution certificate ID
-          echo "Listing certificates..."
-          app-store-connect list-certificates --type IOS_DISTRIBUTION --json
+          # Create distribution certificate
+          echo "Creating distribution certificate..."
+          CERT_INFO=$(app-store-connect certificates create \
+            --type IOS_DISTRIBUTION \
+            --save \
+            --certificates-dir ~/certificates)
+          echo "$CERT_INFO"
+          
+          # Get the certificate ID
+          CERT_ID=$(echo "$CERT_INFO" | grep -o '"id":"[^"]*"' | cut -d'"' -f4)
+          echo "Certificate ID: $CERT_ID"
           
           # Get the bundle ID resource ID
           echo "Getting bundle ID resource..."
-          app-store-connect list-bundle-ids --json | grep -B 2 "$EXTENSION_BUNDLE_ID"
+          BUNDLE_ID_INFO=$(app-store-connect bundle-ids list --json | grep -B 2 "$EXTENSION_BUNDLE_ID")
+          echo "$BUNDLE_ID_INFO"
           
-          # Create the profile using the certificate ID
+          # Create the profile
           echo "Creating profile..."
           app-store-connect create-profile \
             --type IOS_APP_STORE \
             --bundle-id "$EXTENSION_BUNDLE_ID" \
-            --certificate-ids $(app-store-connect list-certificates --type IOS_DISTRIBUTION --json | grep -o '"id":"[^"]*"' | cut -d'"' -f4) \
+            --certificate-ids "$CERT_ID" \
             --name "Braver Search iOS Extension App Store"
             
           echo "After creating extension profile:"
