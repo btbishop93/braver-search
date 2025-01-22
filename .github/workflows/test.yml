@@ -17,13 +17,17 @@ jobs:
     - name: Select Xcode
       run: sudo xcode-select -s /Applications/Xcode_15.4.app
       
-    - name: List Directory Contents
-      run: ls -la
+    - name: Debug Directory Structure
+      run: |
+        pwd
+        ls -la
+        ls -la "Braver Search"
       
     - name: Build and Test
-      working-directory: ./Braver Search
       run: |
+        cd "Braver Search"
         xcodebuild test \
+          -project "Braver Search.xcodeproj" \
           -scheme "Braver Search" \
           -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0' \
           -enableCodeCoverage YES
