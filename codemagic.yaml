@@ -2,6 +2,8 @@ workflows:
   app-store:
     name: Universal App Store Build
     instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: braver_search_credentials
     environment:
       vars:
         XCODE_PROJECT: "Braver Search/Braver Search.xcodeproj"
