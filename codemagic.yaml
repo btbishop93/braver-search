@@ -11,11 +11,10 @@ workflows:
         XCODE_SCHEME_MACOS: "Braver Search (macOS)"
         BUNDLE_ID: "xyz.bsquared.Braver-Search"
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
-        APP_GROUP: "group.xyz.bsquared.braversearch"
       xcode: latest
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: xyz.bsquared.Braver-Search
+        bundle_identifier: xyz.bsquared.Braver-Search xyz.bsquared.Braver-Search.Extension
     triggering:
       events:
         - push
@@ -27,16 +26,6 @@ workflows:
       - name: Set up keychain
         script: |
           keychain initialize
-      - name: Fetch signing files
-        script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create \
-            --app-groups "$APP_GROUP"
-          app-store-connect fetch-signing-files "$EXTENSION_BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create \
-            --app-groups "$APP_GROUP"
       - name: Set up code signing settings
         script: |
           xcode-project use-profiles
