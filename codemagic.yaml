@@ -13,8 +13,8 @@ workflows:
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
       xcode: latest
       ios_signing:
-          distribution_type: app_store
-          bundle_identifier: xyz.bsquared.Braver-Search
+        distribution_type: app_store
+        bundle_identifier: xyz.bsquared.Braver-Search
     triggering:
       events:
         - push
@@ -26,13 +26,17 @@ workflows:
       - name: Set up keychain
         script: |
           keychain initialize
-      - name: Update project settings
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+          app-store-connect fetch-signing-files "$EXTENSION_BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      - name: Set up code signing settings
         script: |
           xcode-project use-profiles
-          xcode-project clear-signing \
-            --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME_IOS" \
-            --disable-automatic-signing
       - name: Build iOS App
         script: |
           xcode-project build-ipa \
