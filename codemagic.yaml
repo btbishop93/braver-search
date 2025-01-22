@@ -22,22 +22,12 @@ workflows:
           echo "Setting up code signing"
           keychain initialize
     
-    signing:
-      ios:
-        provisioning_profiles:
-          - profile_name
-        certificates:
-          - certificate_name
-      macos:
-        provisioning_profiles:
-          - profile_name
-        certificates:
-          - certificate_name
+    app_store_connect:
+      api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+      key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+      issuer_id: $APP_STORE_CONNECT_ISSUER_ID
     
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_app_store: true
         release_type: MANUAL 
