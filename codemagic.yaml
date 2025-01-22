@@ -11,6 +11,7 @@ workflows:
         XCODE_SCHEME_MACOS: "Braver Search (macOS)"
         BUNDLE_ID: "xyz.bsquared.Braver-Search"
         EXTENSION_BUNDLE_ID: "xyz.bsquared.Braver-Search.Extension"
+        APP_GROUP: "group.xyz.bsquared.braversearch"
       xcode: latest
       ios_signing:
         distribution_type: app_store
