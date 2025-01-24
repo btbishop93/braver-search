@@ -1,23 +1,22 @@
-name: App Store Deployment
+name: App Store Deployment (Raw)
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'Braver Search/**'
-      - '.github/workflows/app-store.yml'
-      - 'fastlane/**'
-  workflow_dispatch:  # Allow manual triggering
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  test-build-deploy:
-    name: Test, Build and Deploy
+  deploy:
+    name: Build and Deploy
     runs-on: macos-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     
     env:
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-      
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,34 +35,13 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: List available simulators
-        run: xcrun simctl list devices available
-
-      - name: Set up iOS simulator
-        run: |
-          # Use existing simulator
-          SIMULATOR_UDID="F80CC2E8-BF9A-40DA-A0D0-CF1135D821D1"
-          echo "SIMULATOR_UDID=$SIMULATOR_UDID" >> $GITHUB_ENV
-          
-          # Boot the simulator
-          xcrun simctl boot "$SIMULATOR_UDID"
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
-
-      - name: Set up code signing
+      - name: Set up keychain
         env:
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
-          APPLE_API_PRIVATE_KEY: ${{ secrets.APPLE_API_PRIVATE_KEY }}
           CERTIFICATE_PRIVATE_KEY: ${{ secrets.APPLE_CERTIFICATE_PRIVATE_KEY }}
         run: |
-          # Create temporary keychain
-          KEYCHAIN_NAME="github_actions_keychain"
-          KEYCHAIN_PASSWORD="temporary_password"
+          # Create keychain
+          KEYCHAIN_NAME="build.keychain"
+          KEYCHAIN_PASSWORD="temporary"
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
           security default-keychain -s "$KEYCHAIN_NAME"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
@@ -72,29 +50,122 @@ jobs:
           # Import certificate
           echo "$CERTIFICATE_PRIVATE_KEY" > certificate_key.pem
           security import certificate_key.pem -k "$KEYCHAIN_NAME" -T /usr/bin/codesign
-          
-          # Set up App Store Connect API
+          rm certificate_key.pem
+
+      - name: Set up App Store Connect API
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
+          APPLE_API_PRIVATE_KEY: ${{ secrets.APPLE_API_PRIVATE_KEY }}
+        run: |
+          # Store API key
           echo "$APPLE_API_PRIVATE_KEY" > appstore_key.p8
-          mkdir -p ~/.fastlane
-          cat > ~/.fastlane/app_store_connect_api_key.json << EOF
-          {
-            "key_id": "$APPLE_API_KEY_ID",
-            "issuer_id": "$APPLE_API_KEY_ISSUER_ID",
-            "key": "$(cat appstore_key.p8)"
-          }
+          xcrun altool --store-credentials-in-keychain-item "AC_PASSWORD" \
+            --apiKey "$APPLE_API_KEY_ID" \
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID"
+          rm appstore_key.p8
+
+      - name: Build iOS App
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          # Archive
+          xcodebuild archive \
+            -project "Braver Search/Braver Search.xcodeproj" \
+            -scheme "Braver Search (iOS)" \
+            -configuration Release \
+            -archivePath build/ios/BraverSearch.xcarchive \
+            -destination "generic/platform=iOS" \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID"
+
+          # Create exportOptions.plist
+          cat > exportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>teamID</key>
+              <string>$APPLE_TEAM_ID</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>xyz.bsquared.Braver-Search</key>
+                  <string>Braver Search iOS App Store</string>
+                  <key>xyz.bsquared.Braver-Search.Extension</key>
+                  <string>Braver Search iOS Extension App Store</string>
+              </dict>
+          </dict>
+          </plist>
           EOF
 
-          # Clean up sensitive files
-          rm certificate_key.pem appstore_key.p8
+          # Export IPA
+          xcodebuild -exportArchive \
+            -archivePath build/ios/BraverSearch.xcarchive \
+            -exportPath build/ios \
+            -exportOptionsPlist exportOptions.plist \
+            -allowProvisioningUpdates
 
-      - name: Run iOS lane
-        run: bundle exec fastlane ios beta
+      - name: Build macOS App
         env:
-          MATCH_KEYCHAIN_NAME: github_actions_keychain
-          MATCH_KEYCHAIN_PASSWORD: temporary_password
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          # Archive
+          xcodebuild archive \
+            -project "Braver Search/Braver Search.xcodeproj" \
+            -scheme "Braver Search (macOS)" \
+            -configuration Release \
+            -archivePath build/macos/BraverSearch.xcarchive \
+            -destination "generic/platform=macOS" \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID"
 
-      - name: Run macOS lane
-        run: bundle exec fastlane mac beta
+          # Create exportOptions.plist
+          cat > exportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>teamID</key>
+              <string>$APPLE_TEAM_ID</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>xyz.bsquared.Braver-Search</key>
+                  <string>Braver Search macOS App Store</string>
+                  <key>xyz.bsquared.Braver-Search.Extension</key>
+                  <string>Braver Search macOS Extension App Store</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
+
+          # Export APP
+          xcodebuild -exportArchive \
+            -archivePath build/macos/BraverSearch.xcarchive \
+            -exportPath build/macos \
+            -exportOptionsPlist exportOptions.plist \
+            -allowProvisioningUpdates
+
+      - name: Upload to TestFlight
         env:
-          MATCH_KEYCHAIN_NAME: github_actions_keychain
-          MATCH_KEYCHAIN_PASSWORD: temporary_password 
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
+        run: |
+          # Upload iOS build
+          xcrun altool --upload-app --type ios \
+            --file "build/ios/BraverSearch.ipa" \
+            --apiKey "$APPLE_API_KEY_ID" \
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID"
+          
+          # Upload macOS build
+          xcrun altool --upload-app --type osx \
+            --file "build/macos/BraverSearch.app" \
+            --apiKey "$APPLE_API_KEY_ID" \
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" 
