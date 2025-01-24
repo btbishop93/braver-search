@@ -160,7 +160,7 @@ jobs:
             CODE_SIGN_IDENTITY="Apple Distribution" \
             "Braver Search (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS App Store" \
             "Braver Search Extension (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS Extension App Store" \
-            OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
+            OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/build.keychain"
 
           # Create exportOptions.plist for macOS
           cat > exportOptions.plist << EOF
