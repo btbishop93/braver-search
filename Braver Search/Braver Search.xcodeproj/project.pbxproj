@@ -79,6 +79,17 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE77FB302D3C8C8000B47EE3 /* Copy Extension Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Resources;
+			dstSubfolderSpec = 7;
+			files = (
+				CE77FB312D3C8C8000B47EE3 /* manifest.json in Copy Extension Resources */,
+			);
+			name = "Copy Extension Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -823,6 +834,8 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = appex;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Application Support/Safari/Extensions";
 			};
 			name = Debug;
 		};
@@ -861,6 +874,8 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = appex;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Application Support/Safari/Extensions";
 			};
 			name = Release;
 		};
@@ -901,6 +916,10 @@
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = app;
+				INSTALL_PATH = "$(LOCAL_APPLICATIONS_DIR)";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Debug;
 		};
@@ -941,6 +960,10 @@
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = app;
+				INSTALL_PATH = "$(LOCAL_APPLICATIONS_DIR)";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Release;
 		};
