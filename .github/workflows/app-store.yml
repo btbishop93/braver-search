@@ -51,11 +51,18 @@ jobs:
             --output-format json | grep -o '"version":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
           
           if [ -z "$latest_testflight_version" ]; then
-            echo "No TestFlight version found, using 1.0"
-            latest_testflight_version="1.0"
+            echo "No TestFlight version found, reading from Info.plist..."
+            # Read version from Info.plist files
+            ios_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "iOS (App)/Info.plist")
+            macos_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "macOS (App)/Info.plist")
+            manifest_version=$(/usr/libexec/PlistBuddy -c "Print :version" "Shared (Extension)/Resources/manifest.json")
+            
+            # Use the highest version found
+            latest_testflight_version=$(printf "%s\n%s\n%s\n" "$ios_version" "$macos_version" "$manifest_version" | sort -V | tail -n1)
+            echo "Using version from project files: $latest_testflight_version"
+          else
+            echo "Latest TestFlight version: $latest_testflight_version"
           fi
-          
-          echo "Latest TestFlight version: $latest_testflight_version"
           
           # Split version into whole and decimal parts
           whole_part=${latest_testflight_version%.*}
@@ -80,6 +87,10 @@ jobs:
           
           # Set new version number for all targets
           agvtool new-version -all $new_version
+          
+          # Also update manifest.json version
+          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Shared (Extension)/Resources/manifest.json"
+          
           echo "Incremented build number from $latest_testflight_version to $new_version"
 
       - name: Import Certificate
