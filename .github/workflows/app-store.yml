@@ -47,42 +47,45 @@ jobs:
           MACOS_APP_PROFILE_BASE64: ${{ secrets.MACOS_APP_PROFILE_BASE64 }}
           MACOS_EXT_PROFILE_BASE64: ${{ secrets.MACOS_EXT_PROFILE_BASE64 }}
         run: |
+          # Create variables
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          
           # Create keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          security set-keychain-settings -t 3600 -l build.keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
           # Import distribution certificate
-          echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode > distribution.p12
-          security import distribution.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          rm distribution.p12
+          CERTIFICATE_PATH=$RUNNER_TEMP/distribution.p12
+          echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode -o $CERTIFICATE_PATH
+          security import $CERTIFICATE_PATH -P "$CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          rm $CERTIFICATE_PATH
 
           # Import Mac Installer Distribution certificate
-          echo $MAC_INSTALLER_CERTIFICATE_BASE64 | base64 --decode > mac_installer.p12
-          security import mac_installer.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          rm mac_installer.p12
+          MAC_CERTIFICATE_PATH=$RUNNER_TEMP/mac_installer.p12
+          echo $MAC_INSTALLER_CERTIFICATE_BASE64 | base64 --decode -o $MAC_CERTIFICATE_PATH
+          security import $MAC_CERTIFICATE_PATH -P "$CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          rm $MAC_CERTIFICATE_PATH
 
           # Create provisioning profiles directory
-          mkdir -p ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
           # Install iOS App Store profiles
-          echo "$IOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_iOS_App_Store.mobileprovision
-          echo "$IOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_iOS_Extension_App_Store.mobileprovision
+          echo "$IOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_App_Store.mobileprovision
+          echo "$IOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_Extension_App_Store.mobileprovision
 
           # Install macOS App Store profiles
-          echo "$MACOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_macOS_App_Store.provisionprofile
-          echo "$MACOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_macOS_Extension_App_Store.provisionprofile
+          echo "$MACOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_App_Store.provisionprofile
+          echo "$MACOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_Extension_App_Store.provisionprofile
 
           # Set permissions
-          sudo chown -R $USER:staff ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/
+          sudo chown -R $USER:staff ~/Library/MobileDevice/Provisioning\ Profiles/
 
-          # List installed profiles for debugging
-          echo "Listing profiles in Xcode directory:"
-          ls -la ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/
+          # Set key partition list
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
 
-          # Update keychain search list
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+          # List keychains
+          security list-keychain -d user -s $KEYCHAIN_PATH
 
       - name: Set up App Store Connect API
         env:
@@ -110,7 +113,7 @@ jobs:
             CODE_SIGN_IDENTITY="Apple Distribution" \
             "Braver Search (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS App Store" \
             "Braver Search Extension (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS Extension App Store" \
-            OTHER_CODE_SIGN_FLAGS="--keychain build.keychain" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/app-signing.keychain-db" \
             ENABLE_BITCODE=NO
 
           # Create exportOptions.plist for iOS
@@ -160,7 +163,7 @@ jobs:
             CODE_SIGN_IDENTITY="Apple Distribution" \
             "Braver Search (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS App Store" \
             "Braver Search Extension (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS Extension App Store" \
-            OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/build.keychain"
+            OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/app-signing.keychain-db"
 
           # Create exportOptions.plist for macOS
           cat > exportOptions.plist << EOF
@@ -215,4 +218,6 @@ jobs:
       - name: Clean up secrets
         if: always()
         run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/*
           rm -f ~/.appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8
