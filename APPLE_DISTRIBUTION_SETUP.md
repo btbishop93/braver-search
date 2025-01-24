@@ -6,7 +6,7 @@ This guide walks through the complete setup process for distributing iOS and mac
 - Apple Developer Program membership
 - Access to App Store Connect
 - Access to Apple Developer portal
-- Xcode installed on your Mac
+- Xcode installed locally for testing
 - GitHub repository for your project
 
 ## 1. App Store Connect API Key Setup
@@ -36,6 +36,11 @@ This guide walks through the complete setup process for distributing iOS and mac
     - Choose Export
     - Save as .p12 file
     - Set a temporary password
+12. Extract the private key for GitHub:
+    ```bash
+    cd ~/Downloads
+    openssl pkcs12 -in distribution.p12 -nodes -nocerts -legacy -out private_key.pem -passin pass:YOUR_PASSWORD
+    ```
 
 ## 3. Provisioning Profiles Setup
 For a universal Safari extension app, you need four provisioning profiles:
@@ -46,9 +51,9 @@ For a universal Safari extension app, you need four provisioning profiles:
 3. Select "App Store" under iOS
 4. Select your main app bundle ID
 5. Select your Distribution certificate
-6. Name it clearly (e.g., "MyApp iOS App Store")
-7. Download the profile
-8. Repeat for extension with extension bundle ID
+6. Name it "Braver Search iOS App Store"
+7. Download the profile as `Braver_Search_iOS_App_Store.mobileprovision`
+8. Repeat for extension with extension bundle ID, naming it "Braver Search iOS Extension App Store" and saving as `Braver_Search_iOS_Extension_App_Store.mobileprovision`
 
 ### macOS Profiles
 1. Go to Apple Developer portal > Profiles
@@ -56,9 +61,9 @@ For a universal Safari extension app, you need four provisioning profiles:
 3. Select "Mac App Store" (not Mac Catalyst)
 4. Select your main app bundle ID
 5. Select your Distribution certificate
-6. Name it clearly (e.g., "MyApp macOS App Store")
-7. Download the profile
-8. Repeat for extension with extension bundle ID
+6. Name it "Braver Search macOS App Store"
+7. Download the profile as `Braver_Search_macOS_App_Store.provisionprofile`
+8. Repeat for extension with extension bundle ID, naming it "Braver Search macOS Extension App Store" and saving as `Braver_Search_macOS_Extension_App_Store.provisionprofile`
 
 ## 4. GitHub Secrets Setup
 Add these secrets to your GitHub repository (Settings > Secrets and variables > Actions):
@@ -76,64 +81,54 @@ Add these secrets to your GitHub repository (Settings > Secrets and variables > 
    - Include the BEGIN and END markers
 
 4. `APPLE_CERTIFICATE_PRIVATE_KEY`
-   - Export the private key from your Distribution certificate:
-   ```bash
-   cd ~/Downloads
-   openssl pkcs12 -in distribution.p12 -nodes -nocerts -legacy -out private_key.pem -passin pass:YOUR_PASSWORD
-   ```
    - Value: Content of private_key.pem including BEGIN and END markers
+   - Generated from the distribution certificate
 
 5. `APPLE_TEAM_ID`
    - Value: Your Team ID
    - Found in: Apple Developer portal > Membership
    - Or: App Store Connect > Users and Access (top right)
 
-6. `APPLE_APP_SPECIFIC_PASSWORD`
-   - Go to https://appleid.apple.com
-   - Security > App-Specific Passwords > Generate Password
-   - Give it a name (e.g., "GitHub CI")
-   - Copy the generated password
+6. `IOS_APP_PROFILE_BASE64`
+   - Value: Base64 encoded iOS app provisioning profile
+   - Generate with: `base64 -i Braver_Search_iOS_App_Store.mobileprovision | pbcopy`
 
-## 5. GitHub Actions and Fastlane Setup
+7. `IOS_EXT_PROFILE_BASE64`
+   - Value: Base64 encoded iOS extension provisioning profile
+   - Generate with: `base64 -i Braver_Search_iOS_Extension_App_Store.mobileprovision | pbcopy`
 
-### Fastlane Setup
-1. Create a `Gemfile` in your project root:
-   ```ruby
-   source "https://rubygems.org"
-   gem "fastlane"
-   ```
+8. `MACOS_APP_PROFILE_BASE64`
+   - Value: Base64 encoded macOS app provisioning profile
+   - Generate with: `base64 -i Braver_Search_macOS_App_Store.provisionprofile | pbcopy`
 
-2. Create `fastlane/Fastfile` with your build lanes:
-   ```ruby
-   platform :ios do
-     lane :beta do
-       setup_ci if is_ci
-       update_code_signing_settings(
-         use_automatic_signing: false,
-         team_id: ENV["APPLE_TEAM_ID"]
-       )
-       build_ios_app(
-         project: "YourProject.xcodeproj",
-         scheme: "Your Scheme",
-         export_method: "app-store"
-       )
-       upload_to_testflight
-     end
-   end
-   ```
+9. `MACOS_EXT_PROFILE_BASE64`
+   - Value: Base64 encoded macOS extension provisioning profile
+   - Generate with: `base64 -i Braver_Search_macOS_Extension_App_Store.provisionprofile | pbcopy`
 
-### GitHub Actions Workflow
-1. Create `.github/workflows/app-store.yml`
-2. Configure the workflow to:
-   - Run on push to main or manual trigger
-   - Set up Ruby and Xcode
-   - Create temporary keychain
-   - Import certificates
-   - Run Fastlane lanes
-   - Clean up sensitive data
+## 5. GitHub Actions Workflow
+The deployment workflow uses direct xcodebuild commands to build and deploy the apps. The workflow:
+
+1. Sets up the build environment:
+   - Configures Xcode
+   - Creates a temporary keychain
+   - Installs the distribution certificate
+   - Installs provisioning profiles
+   - Sets up App Store Connect API access
+
+2. Builds the iOS app:
+   - Archives the app using xcodebuild
+   - Creates an exportOptions.plist
+   - Exports the IPA file
+
+3. Builds the macOS app:
+   - Archives the app using xcodebuild
+   - Creates an exportOptions.plist
+   - Exports the APP file
+
+4. Uploads both builds to TestFlight using altool
 
 ## Security Notes
-- Never commit certificates, private keys, or .p12 files to version control
+- Never commit certificates, private keys, or provisioning profiles to version control
 - Delete downloaded certificates and keys after adding to GitHub Secrets
 - Keep the .p8 file from App Store Connect in a secure location
 - GitHub Secrets are encrypted and can only be used by GitHub Actions
@@ -146,14 +141,6 @@ Add these secrets to your GitHub repository (Settings > Secrets and variables > 
 - Mac Catalyst is different from native macOS - use the correct profile type
 - Check GitHub Actions logs for detailed error messages
 - Verify all required secrets are set in GitHub repository settings
-
-## Advantages of Fastlane
-- Simpler, more readable syntax than raw shell commands
-- Built-in error handling and retry mechanisms
-- Automatic environment detection
-- Consistent behavior between local and CI environments
-- Large community and extensive documentation
-- Can be tested locally before running in CI
 
 ## Next Steps
 1. Test the workflow by pushing to main or manual trigger

@@ -40,6 +40,10 @@ jobs:
       - name: Set up keychain
         env:
           CERTIFICATE_PRIVATE_KEY: ${{ secrets.APPLE_CERTIFICATE_PRIVATE_KEY }}
+          IOS_APP_PROFILE_BASE64: ${{ secrets.IOS_APP_PROFILE_BASE64 }}
+          IOS_EXT_PROFILE_BASE64: ${{ secrets.IOS_EXT_PROFILE_BASE64 }}
+          MACOS_APP_PROFILE_BASE64: ${{ secrets.MACOS_APP_PROFILE_BASE64 }}
+          MACOS_EXT_PROFILE_BASE64: ${{ secrets.MACOS_EXT_PROFILE_BASE64 }}
         run: |
           # Create keychain
           KEYCHAIN_NAME="build.keychain"
@@ -53,6 +57,17 @@ jobs:
           echo "$CERTIFICATE_PRIVATE_KEY" > certificate_key.pem
           security import certificate_key.pem -k "$KEYCHAIN_NAME" -T /usr/bin/codesign
           rm certificate_key.pem
+          
+          # Create provisioning profiles directory
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          
+          # Install iOS profiles
+          echo "$IOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_App_Store.mobileprovision
+          echo "$IOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_Extension_App_Store.mobileprovision
+          
+          # Install macOS profiles
+          echo "$MACOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_App_Store.provisionprofile
+          echo "$MACOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_Extension_App_Store.provisionprofile
 
       - name: Set up App Store Connect API
         env:
@@ -88,7 +103,10 @@ jobs:
             -archivePath build/ios/BraverSearch.xcarchive \
             -destination "generic/platform=iOS" \
             -allowProvisioningUpdates \
-            DEVELOPMENT_TEAM="$APPLE_TEAM_ID"
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Manual \
+            "PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS App Store" \
+            "PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]=Braver Search iOS App Store"
 
           # Create exportOptions.plist
           cat > exportOptions.plist << EOF
@@ -132,7 +150,10 @@ jobs:
             -archivePath build/macos/BraverSearch.xcarchive \
             -destination "generic/platform=macOS" \
             -allowProvisioningUpdates \
-            DEVELOPMENT_TEAM="$APPLE_TEAM_ID"
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Manual \
+            "PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS App Store" \
+            "PROVISIONING_PROFILE_SPECIFIER[sdk=macos*]=Braver Search macOS App Store"
 
           # Create exportOptions.plist
           cat > exportOptions.plist << EOF
