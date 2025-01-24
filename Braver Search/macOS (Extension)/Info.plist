@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>xyz.bsquared.Braver-Search.extension</string>
+    <string>xyz.bsquared.Braver-Search.Extension</string>
     <key>CFBundleExecutable</key>
     <string>Braver Search Extension</string>
     <key>ITSAppUsesNonExemptEncryption</key>
