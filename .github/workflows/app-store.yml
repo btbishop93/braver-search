@@ -36,6 +36,35 @@ jobs:
         with:
           xcode-version: '16.1'
 
+      - name: Increment build number
+        run: |
+          cd "Braver Search"
+          # Get current version number (or use 1.0 if not set)
+          current_version=$(agvtool what-version -terse 2>/dev/null || echo "1.0")
+          
+          # Split version into whole and decimal parts
+          whole_part=${current_version%.*}
+          decimal_part=${current_version#*.}
+          
+          # If no decimal part, start at .00
+          if [ "$whole_part" = "$current_version" ]; then
+            decimal_part="0"
+          fi
+          
+          # Increment decimal part
+          new_decimal=$((decimal_part + 1))
+          # Pad with leading zero if single digit
+          if [ $new_decimal -lt 10 ]; then
+            new_decimal="0$new_decimal"
+          fi
+          
+          # Construct new version
+          new_version="$whole_part.$new_decimal"
+          
+          # Set new version number for all targets
+          agvtool new-version -all $new_version
+          echo "Incremented build number from $current_version to $new_version"
+
       - name: Import Certificate
         env:
           DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
