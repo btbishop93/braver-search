@@ -71,15 +71,19 @@ jobs:
           fi
           
           # Parse version number
-          major_minor=${latest_testflight_version%.*}  # Get everything before last dot
-          patch=${latest_testflight_version##*.}       # Get everything after last dot
+          major=${latest_testflight_version%.*}  # Get major version (before dot)
+          minor=${latest_testflight_version#*.}  # Get minor version (after dot)
           
-          # Convert patch to number and increment
-          patch_num=$((10#$patch))  # Force base 10 interpretation
-          new_patch=$((patch_num + 1))
+          # Convert to number that can be incremented by 1 (multiply by 100)
+          # e.g., 1.1 becomes 110, 1.11 becomes 111
+          version_num=$(echo "$major$minor * 100" | bc | cut -d'.' -f1)
           
-          # Create new version string
-          new_version="$major_minor.$new_patch"
+          # Increment by 1
+          new_version_num=$((version_num + 1))
+          
+          # Convert back to semantic version format
+          # e.g., 111 becomes 1.11
+          new_version="$major.$(echo "scale=2; $new_version_num % 100" | bc | sed 's/^\.//')"
           
           echo "Setting new version to: $new_version"
           
