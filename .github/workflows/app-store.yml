@@ -43,6 +43,10 @@ jobs:
           DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           KEYCHAIN_PASSWORD: temporary
+          IOS_APP_DEVELOPMENT_PROFILE_BASE64: ${{ secrets.IOS_APP_DEVELOPMENT_PROFILE_BASE64 }}
+          IOS_EXT_DEVELOPMENT_PROFILE_BASE64: ${{ secrets.IOS_EXT_DEVELOPMENT_PROFILE_BASE64 }}
+          MACOS_APP_DEVELOPMENT_PROFILE_BASE64: ${{ secrets.MACOS_APP_DEVELOPMENT_PROFILE_BASE64 }}
+          MACOS_EXT_DEVELOPMENT_PROFILE_BASE64: ${{ secrets.MACOS_EXT_DEVELOPMENT_PROFILE_BASE64 }}
         run: |
           # Create keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
@@ -59,6 +63,30 @@ jobs:
           echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode > distribution.p12
           security import distribution.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
           rm distribution.p12
+
+          # Create provisioning profiles directories
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          mkdir -p ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles
+
+          # Install iOS development profiles
+          echo "$IOS_APP_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/ios_app_development.mobileprovision
+          echo "$IOS_EXT_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/ios_ext_development.mobileprovision
+          
+          # Also install in new Xcode location
+          echo "$IOS_APP_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/ios_app_development.mobileprovision
+          echo "$IOS_EXT_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/ios_ext_development.mobileprovision
+
+          # Install macOS development profiles
+          echo "$MACOS_APP_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/macos_app_development.provisionprofile
+          echo "$MACOS_EXT_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/macos_ext_development.provisionprofile
+          
+          # Also install in new Xcode location
+          echo "$MACOS_APP_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/macos_app_development.provisionprofile
+          echo "$MACOS_EXT_DEVELOPMENT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/macos_ext_development.provisionprofile
+
+          # Set permissions
+          sudo chown -R $USER:staff ~/Library/MobileDevice/Provisioning\ Profiles/
+          sudo chown -R $USER:staff ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/
 
           # Update keychain search list
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
