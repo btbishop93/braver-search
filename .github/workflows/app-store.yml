@@ -223,7 +223,7 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>app-store-connect</string>
+              <string>mac-application</string>
               <key>teamID</key>
               <string>$APPLE_TEAM_ID</string>
               <key>signingStyle</key>
