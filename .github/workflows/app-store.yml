@@ -37,37 +37,23 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: Set up keychain
+      - name: Import Certificate
         env:
-          CERTIFICATE_PRIVATE_KEY: ${{ secrets.APPLE_CERTIFICATE_PRIVATE_KEY }}
-          IOS_APP_PROFILE_BASE64: ${{ secrets.IOS_APP_PROFILE_BASE64 }}
-          IOS_EXT_PROFILE_BASE64: ${{ secrets.IOS_EXT_PROFILE_BASE64 }}
-          MACOS_APP_PROFILE_BASE64: ${{ secrets.MACOS_APP_PROFILE_BASE64 }}
-          MACOS_EXT_PROFILE_BASE64: ${{ secrets.MACOS_EXT_PROFILE_BASE64 }}
+          CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+          KEYCHAIN_PASSWORD: temporary
         run: |
           # Create keychain
-          KEYCHAIN_NAME="build.keychain"
-          KEYCHAIN_PASSWORD="temporary"
-          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
-          security default-keychain -s "$KEYCHAIN_NAME"
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
-          security set-keychain-settings -t 3600 -l "$KEYCHAIN_NAME"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security set-keychain-settings -t 3600 -l build.keychain
 
           # Import certificate
-          echo "$CERTIFICATE_PRIVATE_KEY" > certificate_key.pem
-          security import certificate_key.pem -k "$KEYCHAIN_NAME" -T /usr/bin/codesign
-          rm certificate_key.pem
-          
-          # Create provisioning profiles directory
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          
-          # Install iOS profiles
-          echo "$IOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_App_Store.mobileprovision
-          echo "$IOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_Extension_App_Store.mobileprovision
-          
-          # Install macOS profiles
-          echo "$MACOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_App_Store.provisionprofile
-          echo "$MACOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_Extension_App_Store.provisionprofile
+          echo $CERTIFICATE_BASE64 | base64 --decode > certificate.p12
+          security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+          rm certificate.p12
 
       - name: Set up App Store Connect API
         env:
@@ -75,21 +61,8 @@ jobs:
           APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
           APPLE_API_PRIVATE_KEY: ${{ secrets.APPLE_API_PRIVATE_KEY }}
         run: |
-          # Create private_keys directory
           mkdir -p ~/.appstoreconnect/private_keys
-    
-          # Store API key
           echo "$APPLE_API_PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8
-
-      - name: Verify App Store Connect API credentials
-        env:
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
-        run: |
-          # Store API key
-          xcrun altool --list-apps \
-            --apiKey "$APPLE_API_KEY_ID" \
-            --apiIssuer "$APPLE_API_KEY_ISSUER_ID"
 
       - name: Build iOS App
         env:
@@ -103,12 +76,12 @@ jobs:
             -archivePath build/ios/BraverSearch.xcarchive \
             -destination "generic/platform=iOS" \
             -allowProvisioningUpdates \
+            -allowAutomaticCodeSigning YES \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            CODE_SIGN_STYLE=Manual \
-            "Braver Search (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS App Store" \
-            "Braver Search Extension (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS Extension App Store"
+            CODE_SIGN_STYLE=Automatic \
+            OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
 
-          # Create exportOptions.plist
+          # Create exportOptions.plist for iOS
           cat > exportOptions.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -119,16 +92,7 @@ jobs:
               <key>teamID</key>
               <string>$APPLE_TEAM_ID</string>
               <key>signingStyle</key>
-              <string>manual</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>xyz.bsquared.Braver-Search</key>
-                  <string>Braver Search iOS App Store</string>
-                  <key>xyz.bsquared.Braver-Search.Extension</key>
-                  <string>Braver Search iOS Extension App Store</string>
-              </dict>
-              <key>signingCertificate</key>
-              <string>Apple Distribution</string>
+              <string>automatic</string>
           </dict>
           </plist>
           EOF
@@ -152,12 +116,12 @@ jobs:
             -archivePath build/macos/BraverSearch.xcarchive \
             -destination "generic/platform=macOS" \
             -allowProvisioningUpdates \
+            -allowAutomaticCodeSigning YES \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            CODE_SIGN_STYLE=Manual \
-            "Braver Search (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS App Store" \
-            "Braver Search Extension (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS Extension App Store"
+            CODE_SIGN_STYLE=Automatic \
+            OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
 
-          # Create exportOptions.plist
+          # Create exportOptions.plist for macOS
           cat > exportOptions.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -168,16 +132,7 @@ jobs:
               <key>teamID</key>
               <string>$APPLE_TEAM_ID</string>
               <key>signingStyle</key>
-              <string>manual</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>xyz.bsquared.Braver-Search</key>
-                  <string>Braver Search macOS App Store</string>
-                  <key>xyz.bsquared.Braver-Search.Extension</key>
-                  <string>Braver Search macOS Extension App Store</string>
-              </dict>
-              <key>signingCertificate</key>
-              <string>Apple Distribution</string>
+              <string>automatic</string>
           </dict>
           </plist>
           EOF
