@@ -39,7 +39,8 @@ jobs:
 
       - name: Import Certificate
         env:
-          CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
+          DEVELOPMENT_CERTIFICATE_BASE64: ${{ secrets.DEVELOPMENT_CERTIFICATE_BASE64 }}
+          DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           KEYCHAIN_PASSWORD: temporary
         run: |
@@ -49,11 +50,18 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security set-keychain-settings -t 3600 -l build.keychain
 
-          # Import certificate
-          echo $CERTIFICATE_BASE64 | base64 --decode > certificate.p12
-          security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          # Import development certificate
+          echo $DEVELOPMENT_CERTIFICATE_BASE64 | base64 --decode > development.p12
+          security import development.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          rm development.p12
+
+          # Import distribution certificate
+          echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode > distribution.p12
+          security import distribution.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          rm distribution.p12
+
+          # Update keychain search list
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
-          rm certificate.p12
 
       - name: Set up App Store Connect API
         env:
@@ -76,9 +84,9 @@ jobs:
             -archivePath build/ios/BraverSearch.xcarchive \
             -destination "generic/platform=iOS" \
             -allowProvisioningUpdates \
-            -allowAutomaticCodeSigning YES \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_IDENTITY="Apple Development" \
             OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
 
           # Create exportOptions.plist for iOS
@@ -93,6 +101,8 @@ jobs:
               <string>$APPLE_TEAM_ID</string>
               <key>signingStyle</key>
               <string>automatic</string>
+              <key>signingCertificate</key>
+              <string>Apple Distribution</string>
           </dict>
           </plist>
           EOF
@@ -116,9 +126,9 @@ jobs:
             -archivePath build/macos/BraverSearch.xcarchive \
             -destination "generic/platform=macOS" \
             -allowProvisioningUpdates \
-            -allowAutomaticCodeSigning YES \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_IDENTITY="Apple Development" \
             OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
 
           # Create exportOptions.plist for macOS
@@ -133,6 +143,8 @@ jobs:
               <string>$APPLE_TEAM_ID</string>
               <key>signingStyle</key>
               <string>automatic</string>
+              <key>signingCertificate</key>
+              <string>Apple Distribution</string>
           </dict>
           </plist>
           EOF
