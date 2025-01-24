@@ -174,7 +174,7 @@ jobs:
             -scheme "Braver Search (macOS)" \
             -configuration Release \
             -archivePath build/macos/BraverSearch.xcarchive \
-            -destination "generic/platform=macOS" \
+            -destination 'platform=macOS,arch=arm64' \
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Manual \
