@@ -9,13 +9,13 @@ platform :ios do
     # Update code signing settings
     update_code_signing_settings(
       use_automatic_signing: false,
-      path: "Braver Search/Braver Search.xcodeproj",
+      path: "../Braver Search/Braver Search.xcodeproj",
       team_id: ENV["APPLE_TEAM_ID"]
     )
     
     # Build the iOS app
     build_ios_app(
-      project: "Braver Search/Braver Search.xcodeproj",
+      project: "../Braver Search/Braver Search.xcodeproj",
       scheme: "Braver Search (iOS)",
       export_method: "app-store",
       export_options: {
@@ -42,13 +42,13 @@ platform :mac do
     # Update code signing settings
     update_code_signing_settings(
       use_automatic_signing: false,
-      path: "Braver Search/Braver Search.xcodeproj",
+      path: "../Braver Search/Braver Search.xcodeproj",
       team_id: ENV["APPLE_TEAM_ID"]
     )
     
     # Build the macOS app
     build_mac_app(
-      project: "Braver Search/Braver Search.xcodeproj",
+      project: "../Braver Search/Braver Search.xcodeproj",
       scheme: "Braver Search (macOS)",
       export_method: "app-store",
       export_options: {
