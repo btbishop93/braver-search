@@ -36,6 +36,11 @@ jobs:
         with:
           xcode-version: latest-stable
 
+      - name: Set up iOS simulator
+        run: |
+          xcrun simctl create "iPhone 15" "iPhone 15" iOS17.2
+          xcrun simctl boot "iPhone 15"
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

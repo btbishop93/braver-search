@@ -10,7 +10,10 @@ platform :ios do
     run_tests(
       project: "Braver Search/Braver Search.xcodeproj",
       scheme: "Braver Search (iOS)",
-      device: "iPhone 14"
+      devices: ["iPhone 15"],
+      ios_version: "17.2",
+      clean: true,
+      skip_detect_devices: true
     )
     
     # Run JavaScript tests
@@ -58,7 +61,8 @@ platform :mac do
     # Run Swift tests
     run_tests(
       project: "Braver Search/Braver Search.xcodeproj",
-      scheme: "Braver Search (macOS)"
+      scheme: "Braver Search (macOS)",
+      destination: "platform=macOS"
     )
     
     # Run JavaScript tests
