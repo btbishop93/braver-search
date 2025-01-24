@@ -41,6 +41,8 @@ jobs:
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
+          cd "Braver Search"
+          
           # Get latest version from TestFlight
           echo "Checking latest TestFlight version..."
           latest_testflight_version=$(xcrun altool --list-apps \
@@ -50,19 +52,7 @@ jobs:
           
           if [ -z "$latest_testflight_version" ]; then
             echo "No TestFlight version found, reading from project files..."
-            # Read version from Info.plist files using defaults read
-            ios_version=$(defaults read "$(pwd)/Braver Search/iOS (App)/Info" CFBundleShortVersionString)
-            macos_version=$(defaults read "$(pwd)/Braver Search/macOS (App)/Info" CFBundleShortVersionString)
-            
-            # Read version from manifest.json using grep and cut
-            manifest_version=$(grep -o '"version": "[^"]*"' "Braver Search/Shared (Extension)/Resources/manifest.json" | cut -d'"' -f4)
-            
-            echo "iOS version: $ios_version"
-            echo "macOS version: $macos_version"
-            echo "Manifest version: $manifest_version"
-            
-            # Use the highest version found
-            latest_testflight_version=$(printf "%s\n%s\n%s\n" "$ios_version" "$macos_version" "$manifest_version" | sort -V | tail -n1)
+            latest_testflight_version=$(agvtool what-marketing-version -terse1 | head -n1)
             echo "Using version from project files: $latest_testflight_version"
           else
             echo "Latest TestFlight version: $latest_testflight_version"
@@ -70,25 +60,26 @@ jobs:
           
           # Simple increment by 0.01
           new_version=$(echo "$latest_testflight_version + 0.01" | bc)
-          
           echo "Setting new version to: $new_version"
           
-          # Update Info.plist versions using defaults write
-          defaults write "$(pwd)/Braver Search/iOS (App)/Info" CFBundleShortVersionString "$new_version"
-          defaults write "$(pwd)/Braver Search/iOS (App)/Info" CFBundleVersion "$new_version"
-          defaults write "$(pwd)/Braver Search/macOS (App)/Info" CFBundleShortVersionString "$new_version"
-          defaults write "$(pwd)/Braver Search/macOS (App)/Info" CFBundleVersion "$new_version"
+          # Update marketing version (CFBundleShortVersionString)
+          agvtool new-marketing-version $new_version
           
-          # Update extension Info.plist files
-          defaults write "$(pwd)/Braver Search/iOS (Extension)/Info" CFBundleShortVersionString "$new_version"
-          defaults write "$(pwd)/Braver Search/iOS (Extension)/Info" CFBundleVersion "$new_version"
-          defaults write "$(pwd)/Braver Search/macOS (Extension)/Info" CFBundleShortVersionString "$new_version"
-          defaults write "$(pwd)/Braver Search/macOS (Extension)/Info" CFBundleVersion "$new_version"
+          # Update build number (CFBundleVersion) - increment to next number
+          agvtool next-version -all
           
           # Update manifest.json version using sed
-          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Braver Search/Shared (Extension)/Resources/manifest.json"
+          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Shared (Extension)/Resources/manifest.json"
           
-          echo "Incremented build number from $latest_testflight_version to $new_version"
+          echo "Incremented version from $latest_testflight_version to $new_version"
+          
+          # Show the new versions
+          echo "New marketing version:"
+          agvtool what-marketing-version
+          echo "New build number:"
+          agvtool what-version
+          
+          cd ..
 
       - name: Import Certificate
         env:
