@@ -70,20 +70,8 @@ jobs:
             echo "Latest TestFlight version: $latest_testflight_version"
           fi
           
-          # Parse version number
-          major=${latest_testflight_version%.*}  # Get major version (before dot)
-          minor=${latest_testflight_version#*.}  # Get minor version (after dot)
-          
-          # Convert to number that can be incremented by 1 (multiply by 100)
-          # e.g., 1.1 becomes 110, 1.11 becomes 111
-          version_num=$(echo "$major$minor * 100" | bc | cut -d'.' -f1)
-          
-          # Increment by 1
-          new_version_num=$((version_num + 1))
-          
-          # Convert back to semantic version format
-          # e.g., 111 becomes 1.11
-          new_version="$major.$(echo "scale=2; $new_version_num % 100" | bc | sed 's/^\.//')"
+          # Simple increment by 0.01
+          new_version=$(echo "$latest_testflight_version + 0.01" | bc)
           
           echo "Setting new version to: $new_version"
           
