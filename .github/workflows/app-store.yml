@@ -146,6 +146,10 @@ jobs:
             -exportOptionsPlist exportOptions.plist \
             -allowProvisioningUpdates
 
+          # List build directory contents for debugging
+          echo "iOS build directory contents:"
+          ls -R build/ios/
+
       - name: Build macOS App
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -203,17 +207,43 @@ jobs:
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
+          echo "Checking build directories:"
+          echo "iOS build directory:"
+          ls -la build/ios/
+          echo "macOS build directory:"
+          ls -la build/macos/
+
+          # Find the IPA file
+          IPA_PATH=$(find build/ios -name "*.ipa" -type f)
+          if [ -z "$IPA_PATH" ]; then
+            echo "Error: No IPA file found in build/ios directory"
+            exit 1
+          fi
+          echo "Found IPA at: $IPA_PATH"
+
+          # Find the APP file
+          APP_PATH=$(find build/macos -name "*.pkg" -type f)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: No PKG file found in build/macos directory"
+            exit 1
+          fi
+          echo "Found APP at: $APP_PATH"
+
           # Upload iOS build
+          echo "Uploading iOS build..."
           xcrun altool --upload-app --type ios \
-            --file "build/ios/BraverSearch.ipa" \
+            --file "$IPA_PATH" \
             --apiKey "$APPLE_API_KEY_ID" \
-            --apiIssuer "$APPLE_API_KEY_ISSUER_ID"
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+            --verbose
           
           # Upload macOS build
+          echo "Uploading macOS build..."
           xcrun altool --upload-app --type osx \
-            --file "build/macos/BraverSearch.app" \
+            --file "$APP_PATH" \
             --apiKey "$APPLE_API_KEY_ID" \
-            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" 
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+            --verbose
 
       - name: Clean up secrets
         if: always()
