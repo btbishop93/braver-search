@@ -41,8 +41,6 @@ jobs:
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
-          cd "Braver Search"
-          
           # Get latest version from TestFlight
           echo "Checking latest TestFlight version..."
           latest_testflight_version=$(xcrun altool --list-apps \
@@ -53,11 +51,11 @@ jobs:
           if [ -z "$latest_testflight_version" ]; then
             echo "No TestFlight version found, reading from project files..."
             # Read version from Info.plist files
-            ios_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "iOS (App)/Info.plist")
-            macos_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "macOS (App)/Info.plist")
+            ios_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "Braver Search/iOS (App)/Info.plist")
+            macos_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "Braver Search/macOS (App)/Info.plist")
             
             # Read version from manifest.json using grep and cut
-            manifest_version=$(grep -o '"version": "[^"]*"' "Shared (Extension)/Resources/manifest.json" | cut -d'"' -f4)
+            manifest_version=$(grep -o '"version": "[^"]*"' "Braver Search/Shared (Extension)/Resources/manifest.json" | cut -d'"' -f4)
             
             echo "iOS version: $ios_version"
             echo "macOS version: $macos_version"
@@ -76,19 +74,19 @@ jobs:
           echo "Setting new version to: $new_version"
           
           # Update Info.plist versions - both marketing version and build number
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "iOS (App)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "iOS (App)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "macOS (App)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "macOS (App)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/iOS (App)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/iOS (App)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/macOS (App)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/macOS (App)/Info.plist"
           
           # Also update extension Info.plist files
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "iOS (Extension)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "iOS (Extension)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "macOS (Extension)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "macOS (Extension)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/iOS (Extension)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/iOS (Extension)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/macOS (Extension)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/macOS (Extension)/Info.plist"
           
           # Update manifest.json version using sed
-          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Shared (Extension)/Resources/manifest.json"
+          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Braver Search/Shared (Extension)/Resources/manifest.json"
           
           echo "Incremented build number from $latest_testflight_version to $new_version"
 
