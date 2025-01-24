@@ -28,7 +28,7 @@ jobs:
         cd "Braver Search"
         xcodebuild test \
           -project "Braver Search.xcodeproj" \
-          -scheme "Braver Search iOS Tests" \
+          -scheme "Braver Search (iOS)" \
           -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
           -enableCodeCoverage YES
           
@@ -37,7 +37,7 @@ jobs:
         cd "Braver Search"
         xcodebuild test \
           -project "Braver Search.xcodeproj" \
-          -scheme "Braver Search macOS Tests" \
+          -scheme "Braver Search (macOS)" \
           -destination 'platform=macOS,arch=arm64' \
           -enableCodeCoverage YES \
           CODE_SIGN_IDENTITY="-" \
