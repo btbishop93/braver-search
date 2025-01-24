@@ -76,15 +76,17 @@ jobs:
           
           # If no decimal part, start at .00
           if [ "$whole_part" = "$latest_testflight_version" ]; then
-            decimal_part="0"
+            decimal_part="00"
           fi
+          
+          # Remove leading zeros from decimal part for arithmetic
+          decimal_part=$(echo "$decimal_part" | sed 's/^0*//')
           
           # Increment decimal part
           new_decimal=$((decimal_part + 1))
-          # Pad with leading zero if single digit
-          if [ $new_decimal -lt 10 ]; then
-            new_decimal="0$new_decimal"
-          fi
+          
+          # Format decimal part to always have 2 digits
+          printf -v new_decimal "%02d" $new_decimal
           
           # Construct new version
           new_version="$whole_part.$new_decimal"
