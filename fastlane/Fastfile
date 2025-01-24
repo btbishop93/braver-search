@@ -1,0 +1,68 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload iOS app to TestFlight"
+  lane :beta do
+    # Ensure we have the right certificates and profiles
+    setup_ci if is_ci
+    
+    # Update code signing settings
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Braver Search/Braver Search.xcodeproj",
+      team_id: ENV["APPLE_TEAM_ID"]
+    )
+    
+    # Build the iOS app
+    build_ios_app(
+      project: "Braver Search/Braver Search.xcodeproj",
+      scheme: "Braver Search (iOS)",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "xyz.bsquared.Braver-Search" => "Braver Search iOS App Store",
+          "xyz.bsquared.Braver-Search.Extension" => "Braver Search iOS Extension App Store"
+        }
+      }
+    )
+    
+    # Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end
+
+platform :mac do
+  desc "Build and upload macOS app to TestFlight"
+  lane :beta do
+    # Ensure we have the right certificates and profiles
+    setup_ci if is_ci
+    
+    # Update code signing settings
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Braver Search/Braver Search.xcodeproj",
+      team_id: ENV["APPLE_TEAM_ID"]
+    )
+    
+    # Build the macOS app
+    build_mac_app(
+      project: "Braver Search/Braver Search.xcodeproj",
+      scheme: "Braver Search (macOS)",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "xyz.bsquared.Braver-Search" => "Braver Search macOS App Store",
+          "xyz.bsquared.Braver-Search.Extension" => "Braver Search macOS Extension App Store"
+        }
+      }
+    )
+    
+    # Upload to TestFlight
+    upload_to_testflight(
+      platform: "osx",
+      skip_waiting_for_build_processing: true
+    )
+  end
+end 
