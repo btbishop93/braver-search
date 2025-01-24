@@ -39,6 +39,7 @@ jobs:
       - name: Import Certificate
         env:
           DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
+          MAC_INSTALLER_CERTIFICATE_BASE64: ${{ secrets.MAC_INSTALLER_CERTIFICATE_BASE64 }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           KEYCHAIN_PASSWORD: temporary
           IOS_APP_PROFILE_BASE64: ${{ secrets.IOS_APP_PROFILE_BASE64 }}
@@ -56,6 +57,11 @@ jobs:
           echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode > distribution.p12
           security import distribution.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
           rm distribution.p12
+
+          # Import Mac Installer Distribution certificate
+          echo $MAC_INSTALLER_CERTIFICATE_BASE64 | base64 --decode > mac_installer.p12
+          security import mac_installer.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          rm mac_installer.p12
 
           # Create provisioning profiles directory
           mkdir -p ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles
@@ -168,6 +174,8 @@ jobs:
               <string>$APPLE_TEAM_ID</string>
               <key>signingStyle</key>
               <string>manual</string>
+              <key>installerSigningCertificate</key>
+              <string>3rd Party Mac Developer Installer</string>
               <key>provisioningProfiles</key>
               <dict>
                   <key>xyz.bsquared.Braver-Search</key>
