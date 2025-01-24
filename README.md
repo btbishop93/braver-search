@@ -104,6 +104,86 @@ We welcome contributions! Here's how you can help:
 3. Select target platform (iOS/macOS)
 4. Build and run
 
+## Deployment
+
+### Prerequisites
+- Apple Developer Program membership
+- App Store Connect API key
+- Xcode 15.1+ (recommended)
+- GitHub Actions for CI/CD
+
+### Certificates and Profiles Setup
+1. **Distribution Certificates**
+   - iOS/macOS Distribution Certificate
+   - Mac Installer Distribution Certificate (for macOS pkg)
+   - Store both certificates securely as base64 in GitHub Secrets:
+     - `DISTRIBUTION_CERTIFICATE_BASE64`
+     - `MAC_INSTALLER_CERTIFICATE_BASE64`
+     - `CERTIFICATE_PASSWORD`
+
+2. **Provisioning Profiles**
+   - iOS App Store Profile (main app)
+   - iOS App Store Profile (extension)
+   - macOS App Store Profile (main app)
+   - macOS App Store Profile (extension)
+   - Store all profiles as base64 in GitHub Secrets:
+     - `IOS_APP_PROFILE_BASE64`
+     - `IOS_EXT_PROFILE_BASE64`
+     - `MACOS_APP_PROFILE_BASE64`
+     - `MACOS_EXT_PROFILE_BASE64`
+
+3. **App Store Connect API**
+   - Create API Key in App Store Connect
+   - Store credentials in GitHub Secrets:
+     - `APPLE_API_KEY_ID`
+     - `APPLE_API_KEY_ISSUER_ID`
+     - `APPLE_API_PRIVATE_KEY`
+     - `APPLE_TEAM_ID`
+
+### Xcode Project Setup
+1. **Code Signing**
+   - Set manual code signing for all targets
+   - Match provisioning profile names with workflow:
+     - iOS App: "Braver Search iOS App Store"
+     - iOS Extension: "Braver Search iOS Extension App Store"
+     - macOS App: "Braver Search macOS App Store"
+     - macOS Extension: "Braver Search macOS Extension App Store"
+
+2. **Build Settings**
+   - Set `DEVELOPMENT_TEAM` to match your team ID
+   - Enable App Groups capability if needed
+   - Set proper bundle identifiers
+   - Configure proper deployment targets
+
+### App Icon Requirements
+- Provide all required sizes for iOS and macOS
+- Ensure icons have no alpha channel or transparency
+- Use solid background color or gradient
+- Let the system handle icon corner radius
+
+### GitHub Actions Workflow
+The repository includes a GitHub Actions workflow for automated deployment:
+- Triggers on push to main or manual dispatch
+- Builds both iOS and macOS targets
+- Signs with provided certificates
+- Creates proper installers
+- Uploads to TestFlight and App Store
+- Handles cleanup of sensitive data
+
+To use the workflow:
+1. Set up all required secrets in GitHub
+2. Ensure Xcode project settings match workflow expectations
+3. Test the workflow using manual dispatch
+4. Monitor build and upload progress in Actions tab
+
+### Troubleshooting
+Common issues and solutions:
+- **Code Signing Errors**: Verify certificate and profile matches
+- **Build Errors**: Check Xcode version compatibility
+- **Upload Errors**: Verify App Store Connect API credentials
+- **Icon Validation**: Ensure no transparency in app icons
+- **Extension Issues**: Verify manifest.json configuration
+
 ## License
 
 This project is licensed under the MIT License with Commons Clause.
