@@ -54,11 +54,22 @@ jobs:
           security import certificate_key.pem -k "$KEYCHAIN_NAME" -T /usr/bin/codesign
           rm certificate_key.pem
 
-      - name: Verify App Store Connect API credentials
+      - name: Set up App Store Connect API
         env:
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
           APPLE_API_PRIVATE_KEY: ${{ secrets.APPLE_API_PRIVATE_KEY }}
+        run: |
+          # Create private_keys directory
+          mkdir -p ~/.appstoreconnect/private_keys
+    
+          # Store API key
+          echo "$APPLE_API_PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8
+
+      - name: Verify App Store Connect API credentials
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
           # Store API key
           xcrun altool --list-apps \
@@ -169,3 +180,8 @@ jobs:
             --file "build/macos/BraverSearch.app" \
             --apiKey "$APPLE_API_KEY_ID" \
             --apiIssuer "$APPLE_API_KEY_ISSUER_ID" 
+
+      - name: Clean up secrets
+        if: always()
+        run: |
+          rm -f ~/.appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8
