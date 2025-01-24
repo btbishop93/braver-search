@@ -105,8 +105,8 @@ jobs:
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Manual \
-            "PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*][target=Braver Search (iOS)]=Braver Search iOS App Store" \
-            "PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*][target=Braver Search Extension (iOS)]=Braver Search iOS Extension App Store"
+            "Braver Search (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS App Store" \
+            "Braver Search Extension (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS Extension App Store"
 
           # Create exportOptions.plist
           cat > exportOptions.plist << EOF
@@ -154,8 +154,8 @@ jobs:
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Manual \
-            "PROVISIONING_PROFILE_SPECIFIER[sdk=macos*][target=Braver Search (macOS)]=Braver Search macOS App Store" \
-            "PROVISIONING_PROFILE_SPECIFIER[sdk=macos*][target=Braver Search Extension (macOS)]=Braver Search macOS Extension App Store"
+            "Braver Search (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS App Store" \
+            "Braver Search Extension (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS Extension App Store"
 
           # Create exportOptions.plist
           cat > exportOptions.plist << EOF
