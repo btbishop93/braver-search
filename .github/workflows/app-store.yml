@@ -36,9 +36,6 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: List available simulators
-        run: xcrun simctl list devices available
-
       - name: Set up iOS simulator
         run: |
           # Delete any existing iPhone 16 Pro simulators
