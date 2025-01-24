@@ -37,17 +37,32 @@ jobs:
           xcode-version: '16.1'
 
       - name: Increment build number
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
           cd "Braver Search"
-          # Get current version number (or use 1.0 if not set)
-          current_version=$(agvtool what-version -terse 2>/dev/null || echo "1.0")
+          
+          # Get latest version from TestFlight
+          echo "Checking latest TestFlight version..."
+          latest_testflight_version=$(xcrun altool --list-apps \
+            --apiKey "$APPLE_API_KEY_ID" \
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+            --output-format json | grep -o '"version":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
+          
+          if [ -z "$latest_testflight_version" ]; then
+            echo "No TestFlight version found, using 1.0"
+            latest_testflight_version="1.0"
+          fi
+          
+          echo "Latest TestFlight version: $latest_testflight_version"
           
           # Split version into whole and decimal parts
-          whole_part=${current_version%.*}
-          decimal_part=${current_version#*.}
+          whole_part=${latest_testflight_version%.*}
+          decimal_part=${latest_testflight_version#*.}
           
           # If no decimal part, start at .00
-          if [ "$whole_part" = "$current_version" ]; then
+          if [ "$whole_part" = "$latest_testflight_version" ]; then
             decimal_part="0"
           fi
           
@@ -61,9 +76,11 @@ jobs:
           # Construct new version
           new_version="$whole_part.$new_decimal"
           
+          echo "Setting new version to: $new_version"
+          
           # Set new version number for all targets
           agvtool new-version -all $new_version
-          echo "Incremented build number from $current_version to $new_version"
+          echo "Incremented build number from $latest_testflight_version to $new_version"
 
       - name: Import Certificate
         env:
