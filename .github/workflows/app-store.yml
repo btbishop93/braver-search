@@ -50,9 +50,9 @@ jobs:
           
           if [ -z "$latest_testflight_version" ]; then
             echo "No TestFlight version found, reading from project files..."
-            # Read version from Info.plist files
-            ios_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "Braver Search/iOS (App)/Info.plist")
-            macos_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "Braver Search/macOS (App)/Info.plist")
+            # Read version from Info.plist files using defaults read
+            ios_version=$(defaults read "$(pwd)/Braver Search/iOS (App)/Info" CFBundleShortVersionString)
+            macos_version=$(defaults read "$(pwd)/Braver Search/macOS (App)/Info" CFBundleShortVersionString)
             
             # Read version from manifest.json using grep and cut
             manifest_version=$(grep -o '"version": "[^"]*"' "Braver Search/Shared (Extension)/Resources/manifest.json" | cut -d'"' -f4)
@@ -73,17 +73,17 @@ jobs:
           
           echo "Setting new version to: $new_version"
           
-          # Update Info.plist versions - both marketing version and build number
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/iOS (App)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/iOS (App)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/macOS (App)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/macOS (App)/Info.plist"
+          # Update Info.plist versions using defaults write
+          defaults write "$(pwd)/Braver Search/iOS (App)/Info" CFBundleShortVersionString "$new_version"
+          defaults write "$(pwd)/Braver Search/iOS (App)/Info" CFBundleVersion "$new_version"
+          defaults write "$(pwd)/Braver Search/macOS (App)/Info" CFBundleShortVersionString "$new_version"
+          defaults write "$(pwd)/Braver Search/macOS (App)/Info" CFBundleVersion "$new_version"
           
-          # Also update extension Info.plist files
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/iOS (Extension)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/iOS (Extension)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "Braver Search/macOS (Extension)/Info.plist"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $new_version" "Braver Search/macOS (Extension)/Info.plist"
+          # Update extension Info.plist files
+          defaults write "$(pwd)/Braver Search/iOS (Extension)/Info" CFBundleShortVersionString "$new_version"
+          defaults write "$(pwd)/Braver Search/iOS (Extension)/Info" CFBundleVersion "$new_version"
+          defaults write "$(pwd)/Braver Search/macOS (Extension)/Info" CFBundleShortVersionString "$new_version"
+          defaults write "$(pwd)/Braver Search/macOS (Extension)/Info" CFBundleVersion "$new_version"
           
           # Update manifest.json version using sed
           sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Braver Search/Shared (Extension)/Resources/manifest.json"
