@@ -7,8 +7,8 @@
     </linearGradient>
   </defs>
 
-  <!-- Gradient rounded square background -->
-  <rect width="5120" height="5120" rx="1050" fill="url(#a)"/>
+  <!-- Gradient background -->
+  <rect width="5120" height="5120" fill="url(#a)"/>
 
   <!-- White background circle -->
   <circle cx="2560" cy="2560" r="2240" fill="white"/>
