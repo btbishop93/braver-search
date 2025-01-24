@@ -11,9 +11,9 @@ platform :ios do
       project: "Braver Search/Braver Search.xcodeproj",
       scheme: "Braver Search (iOS)",
       devices: ["iPhone 15"],
-      ios_version: "17.2",
       clean: true,
-      skip_detect_devices: true
+      skip_detect_devices: true,
+      destination: "platform=iOS Simulator,name=iPhone 15,OS=17.2"
     )
     
     # Run JavaScript tests
