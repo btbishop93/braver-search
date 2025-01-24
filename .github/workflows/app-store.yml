@@ -56,7 +56,7 @@ jobs:
             ios_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "iOS (App)/Info.plist")
             macos_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "macOS (App)/Info.plist")
             
-            # Read version from manifest.json using grep and cut (more portable than jq)
+            # Read version from manifest.json using grep and cut
             manifest_version=$(grep -o '"version": "[^"]*"' "Shared (Extension)/Resources/manifest.json" | cut -d'"' -f4)
             
             echo "iOS version: $ios_version"
@@ -70,26 +70,16 @@ jobs:
             echo "Latest TestFlight version: $latest_testflight_version"
           fi
           
-          # Split version into whole and decimal parts
-          whole_part=${latest_testflight_version%.*}
-          decimal_part=${latest_testflight_version#*.}
+          # Parse version number
+          major_minor=${latest_testflight_version%.*}  # Get everything before last dot
+          patch=${latest_testflight_version##*.}       # Get everything after last dot
           
-          # If no decimal part, start at .00
-          if [ "$whole_part" = "$latest_testflight_version" ]; then
-            decimal_part="00"
-          fi
+          # Convert patch to number and increment
+          patch_num=$((10#$patch))  # Force base 10 interpretation
+          new_patch=$((patch_num + 1))
           
-          # Remove leading zeros from decimal part for arithmetic
-          decimal_part=$(echo "$decimal_part" | sed 's/^0*//')
-          
-          # Increment decimal part
-          new_decimal=$((decimal_part + 1))
-          
-          # Format decimal part to always have 2 digits
-          printf -v new_decimal "%02d" $new_decimal
-          
-          # Construct new version
-          new_version="$whole_part.$new_decimal"
+          # Create new version string
+          new_version="$major_minor.$new_patch"
           
           echo "Setting new version to: $new_version"
           
