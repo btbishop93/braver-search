@@ -1,21 +1,40 @@
 default_platform(:ios)
 
+# Opt out of analytics
+opt_out_usage
+
 platform :ios do
+  desc "Run iOS tests"
+  lane :test do
+    # Run Swift tests
+    run_tests(
+      project: "Braver Search/Braver Search.xcodeproj",
+      scheme: "Braver Search (iOS)",
+      device: "iPhone 14"
+    )
+    
+    # Run JavaScript tests
+    sh("npm", "test")
+  end
+
   desc "Build and upload iOS app to TestFlight"
   lane :beta do
+    # Run tests first
+    test
+    
     # Ensure we have the right certificates and profiles
     setup_ci if is_ci
     
     # Update code signing settings
     update_code_signing_settings(
       use_automatic_signing: false,
-      path: "../Braver Search/Braver Search.xcodeproj",
+      path: "Braver Search/Braver Search.xcodeproj",
       team_id: ENV["APPLE_TEAM_ID"]
     )
     
     # Build the iOS app
     build_ios_app(
-      project: "../Braver Search/Braver Search.xcodeproj",
+      project: "Braver Search/Braver Search.xcodeproj",
       scheme: "Braver Search (iOS)",
       export_method: "app-store",
       export_options: {
@@ -34,21 +53,36 @@ platform :ios do
 end
 
 platform :mac do
+  desc "Run macOS tests"
+  lane :test do
+    # Run Swift tests
+    run_tests(
+      project: "Braver Search/Braver Search.xcodeproj",
+      scheme: "Braver Search (macOS)"
+    )
+    
+    # Run JavaScript tests
+    sh("npm", "test")
+  end
+
   desc "Build and upload macOS app to TestFlight"
   lane :beta do
+    # Run tests first
+    test
+    
     # Ensure we have the right certificates and profiles
     setup_ci if is_ci
     
     # Update code signing settings
     update_code_signing_settings(
       use_automatic_signing: false,
-      path: "../Braver Search/Braver Search.xcodeproj",
+      path: "Braver Search/Braver Search.xcodeproj",
       team_id: ENV["APPLE_TEAM_ID"]
     )
     
     # Build the macOS app
     build_mac_app(
-      project: "../Braver Search/Braver Search.xcodeproj",
+      project: "Braver Search/Braver Search.xcodeproj",
       scheme: "Braver Search (macOS)",
       export_method: "app-store",
       export_options: {
