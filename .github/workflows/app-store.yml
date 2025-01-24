@@ -40,6 +40,7 @@ jobs:
       - name: Set up keychain
         env:
           CERTIFICATE_PRIVATE_KEY: ${{ secrets.APPLE_CERTIFICATE_PRIVATE_KEY }}
+          DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
           IOS_APP_PROFILE_BASE64: ${{ secrets.IOS_APP_PROFILE_BASE64 }}
           IOS_EXT_PROFILE_BASE64: ${{ secrets.IOS_EXT_PROFILE_BASE64 }}
           MACOS_APP_PROFILE_BASE64: ${{ secrets.MACOS_APP_PROFILE_BASE64 }}
@@ -53,10 +54,12 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
           security set-keychain-settings -t 3600 -l "$KEYCHAIN_NAME"
 
-          # Import certificate
+          # Import certificate and private key
           echo "$CERTIFICATE_PRIVATE_KEY" > certificate_key.pem
+          echo "$DISTRIBUTION_CERTIFICATE_BASE64" | base64 --decode > distribution.cer
           security import certificate_key.pem -k "$KEYCHAIN_NAME" -T /usr/bin/codesign
-          rm certificate_key.pem
+          security import distribution.cer -k "$KEYCHAIN_NAME" -T /usr/bin/codesign
+          rm certificate_key.pem distribution.cer
           
           # Create provisioning profiles directory
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
