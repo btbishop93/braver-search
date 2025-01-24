@@ -51,11 +51,17 @@ jobs:
             --output-format json | grep -o '"version":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
           
           if [ -z "$latest_testflight_version" ]; then
-            echo "No TestFlight version found, reading from Info.plist..."
+            echo "No TestFlight version found, reading from project files..."
             # Read version from Info.plist files
             ios_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "iOS (App)/Info.plist")
             macos_version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "macOS (App)/Info.plist")
-            manifest_version=$(/usr/libexec/PlistBuddy -c "Print :version" "Shared (Extension)/Resources/manifest.json")
+            
+            # Read version from manifest.json using grep and cut (more portable than jq)
+            manifest_version=$(grep -o '"version": "[^"]*"' "Shared (Extension)/Resources/manifest.json" | cut -d'"' -f4)
+            
+            echo "iOS version: $ios_version"
+            echo "macOS version: $macos_version"
+            echo "Manifest version: $manifest_version"
             
             # Use the highest version found
             latest_testflight_version=$(printf "%s\n%s\n%s\n" "$ios_version" "$macos_version" "$manifest_version" | sort -V | tail -n1)
@@ -85,10 +91,11 @@ jobs:
           
           echo "Setting new version to: $new_version"
           
-          # Set new version number for all targets
-          agvtool new-version -all $new_version
+          # Update Info.plist versions
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "iOS (App)/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $new_version" "macOS (App)/Info.plist"
           
-          # Also update manifest.json version
+          # Update manifest.json version using sed
           sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Shared (Extension)/Resources/manifest.json"
           
           echo "Incremented build number from $latest_testflight_version to $new_version"
