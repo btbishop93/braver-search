@@ -88,6 +88,12 @@ jobs:
           sudo chown -R $USER:staff ~/Library/MobileDevice/Provisioning\ Profiles/
           sudo chown -R $USER:staff ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/
 
+          # List installed profiles for debugging
+          echo "Listing profiles in MobileDevice directory:"
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
+          echo "Listing profiles in Xcode directory:"
+          ls -la ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/
+
           # Update keychain search list
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
 
@@ -113,8 +119,10 @@ jobs:
             -destination "generic/platform=iOS" \
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Development" \
+            "Braver Search (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver_Search_iOS_App_Development" \
+            "Braver Search Extension (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver_Search_iOS_Extension_Development" \
             OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
 
           # Create exportOptions.plist for iOS
@@ -155,8 +163,10 @@ jobs:
             -destination "generic/platform=macOS" \
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Development" \
+            "Braver Search (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver_Search_macOS_App_Development" \
+            "Braver Search Extension (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver_Search_macOS_Extension_Development" \
             OTHER_CODE_SIGN_FLAGS="--keychain build.keychain"
 
           # Create exportOptions.plist for macOS
