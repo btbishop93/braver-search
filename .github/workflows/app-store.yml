@@ -192,7 +192,8 @@ jobs:
             -archivePath build/macos/BraverSearch.xcarchive \
             -exportPath build/macos \
             -exportOptionsPlist exportOptions.plist \
-            -allowProvisioningUpdates
+            -allowProvisioningUpdates \
+            -verbose
 
       - name: Upload to TestFlight
         env:
