@@ -31,15 +31,6 @@ jobs:
           rm -rf ./**/*.xcodeproj/xcuserdata
           rm -rf build/
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install Node dependencies
-        run: npm ci
-
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -47,7 +38,6 @@ jobs:
 
       - name: Import Certificate
         env:
-          DEVELOPMENT_CERTIFICATE_BASE64: ${{ secrets.DEVELOPMENT_CERTIFICATE_BASE64 }}
           DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           KEYCHAIN_PASSWORD: temporary
@@ -62,43 +52,26 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security set-keychain-settings -t 3600 -l build.keychain
 
-          # Import development certificate
-          echo $DEVELOPMENT_CERTIFICATE_BASE64 | base64 --decode > development.p12
-          security import development.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          rm development.p12
-
           # Import distribution certificate
           echo $DISTRIBUTION_CERTIFICATE_BASE64 | base64 --decode > distribution.p12
           security import distribution.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
           rm distribution.p12
 
-          # Create provisioning profiles directories
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          # Create provisioning profiles directory
           mkdir -p ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles
 
           # Install iOS App Store profiles
-          echo "$IOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_App_Store.mobileprovision
-          echo "$IOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_iOS_Extension_App_Store.mobileprovision
-          
-          # Also install in new Xcode location
           echo "$IOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_iOS_App_Store.mobileprovision
           echo "$IOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_iOS_Extension_App_Store.mobileprovision
 
           # Install macOS App Store profiles
-          echo "$MACOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_App_Store.provisionprofile
-          echo "$MACOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/Braver_Search_macOS_Extension_App_Store.provisionprofile
-          
-          # Also install in new Xcode location
           echo "$MACOS_APP_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_macOS_App_Store.provisionprofile
           echo "$MACOS_EXT_PROFILE_BASE64" | base64 --decode > ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Braver_Search_macOS_Extension_App_Store.provisionprofile
 
           # Set permissions
-          sudo chown -R $USER:staff ~/Library/MobileDevice/Provisioning\ Profiles/
           sudo chown -R $USER:staff ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/
 
           # List installed profiles for debugging
-          echo "Listing profiles in MobileDevice directory:"
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
           echo "Listing profiles in Xcode directory:"
           ls -la ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/
 
