@@ -10,7 +10,7 @@ platform :ios do
     run_tests(
       project: "Braver Search/Braver Search.xcodeproj",
       scheme: "Braver Search (iOS)",
-      device: "iPhone 16 CI",
+      device: "iPhone 16 Pro",
       clean: true
     )
     

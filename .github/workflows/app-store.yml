@@ -41,12 +41,11 @@ jobs:
 
       - name: Set up iOS simulator
         run: |
-          # Delete any existing iPhone 15 simulators
-          xcrun simctl delete "iPhone 15" || true
+          # Delete any existing iPhone 16 Pro simulators
+          xcrun simctl delete "iPhone 16 Pro" || true
           
-          # Create a new simulator with a unique name
-          SIMULATOR_NAME="iPhone 16 CI"
-          SIMULATOR_UDID=$(xcrun simctl create "$SIMULATOR_NAME" "iPhone 16" iOS18.2)
+          # Create simulator
+          SIMULATOR_UDID=$(xcrun simctl create "iPhone 16 Pro" "iPhone 16 Pro" iOS18.1)
           echo "SIMULATOR_UDID=$SIMULATOR_UDID" >> $GITHUB_ENV
           
           # Boot the simulator
