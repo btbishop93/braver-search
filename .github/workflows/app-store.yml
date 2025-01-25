@@ -12,7 +12,7 @@ on:
 
 env:
   MARKETING_VERSION: "1.0"
-  BASE_BUILD_NUMBER: ${{ vars.BUILD_NUMBER || 1 }}
+  BASE_BUILD_NUMBER: ${{ vars.BUILD_NUMBER || 5 }}
 
 jobs:
   deploy:
@@ -26,14 +26,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Clean workspace
-        run: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData/*
-          rm -rf ./**/xcuserdata
-          rm -rf ./**/*.xcodeproj/project.xcworkspace/xcuserdata
-          rm -rf ./**/*.xcodeproj/xcuserdata
-          rm -rf build/
 
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
