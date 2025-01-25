@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleExecutable</key>
-    <string>Braver Search Extension</string>
+    <string>BraverSearchExtension</string>
     <key>CFBundleIdentifier</key>
     <string>xyz.bsquared.Braver-Search.Extension</string>
     <key>ITSAppUsesNonExemptEncryption</key>

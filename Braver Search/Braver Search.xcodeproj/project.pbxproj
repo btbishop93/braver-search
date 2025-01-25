@@ -71,8 +71,8 @@
 		CE77FB202D3C8C8000B47EE3 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "Contents/PlugIns";
-			dstSubfolderSpec = 1;
+			dstPath = "";
+			dstSubfolderSpec = 13;
 			files = (
 				CE77FAED2D3C8C8000B47EE3 /* Braver Search Extension.appex in Embed Foundation Extensions */,
 			);
@@ -82,8 +82,8 @@
 		CE77FB302D3C8C8000B47EE3 /* Copy Extension Resources */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = Resources;
-			dstSubfolderSpec = 7;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
 				CE77FB312D3C8C8000B47EE3 /* manifest.json in Copy Extension Resources */,
 			);
