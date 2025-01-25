@@ -40,9 +40,6 @@ jobs:
         run: |
           cd "Braver Search"
           
-          # Enable version tracking if not already enabled
-          agvtool enable-version-updates
-          
           # Get current marketing version
           current_marketing_version=$(agvtool what-marketing-version -terse1)
           echo "Current marketing version: $current_marketing_version"
@@ -54,11 +51,11 @@ jobs:
           # Increment iOS versions
           # Marketing version: increment by 0.01
           new_marketing_version=$(echo "$current_marketing_version + 0.01" | bc)
-          agvtool new-marketing-version $new_marketing_version
+          agvtool new-marketing-version "$new_marketing_version"
           echo "New iOS marketing version: $(agvtool what-marketing-version -terse1)"
           
           # Build version: increment by 1
-          agvtool next-version -all
+          agvtool new-version -all $((current_build_version + 1))
           ios_build_version=$(agvtool what-version -terse)
           echo "New iOS build version: $ios_build_version"
           
@@ -192,11 +189,11 @@ jobs:
           
           # Marketing version: increment by 0.01 from iOS
           new_marketing_version=$(echo "$ios_marketing_version + 0.01" | bc)
-          agvtool new-marketing-version $new_marketing_version
+          agvtool new-marketing-version "$new_marketing_version"
           echo "New macOS marketing version: $(agvtool what-marketing-version -terse1)"
           
           # Build version: increment by 1 from iOS
-          agvtool next-version -all
+          agvtool new-version -all $((ios_build_version + 1))
           echo "New macOS build version: $(agvtool what-version -terse)"
           cd ..
 
