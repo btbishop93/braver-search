@@ -43,14 +43,27 @@ jobs:
           # Enable version tracking if not already enabled
           agvtool enable-version-updates
           
-          # Get current version
-          current_version=$(agvtool what-version -terse)
-          echo "Current version: $current_version"
+          # Get current marketing version
+          current_marketing_version=$(agvtool what-marketing-version -terse1)
+          echo "Current marketing version: $current_marketing_version"
           
-          # Increment iOS version
+          # Get current build version
+          current_build_version=$(agvtool what-version -terse)
+          echo "Current build version: $current_build_version"
+          
+          # Increment iOS versions
+          # Marketing version: increment by 0.01
+          new_marketing_version=$(echo "$current_marketing_version + 0.01" | bc)
+          agvtool new-marketing-version $new_marketing_version
+          echo "New iOS marketing version: $(agvtool what-marketing-version -terse1)"
+          
+          # Build version: increment by 1
           agvtool next-version -all
-          ios_version=$(agvtool what-version -terse)
-          echo "New iOS version: $ios_version"
+          ios_build_version=$(agvtool what-version -terse)
+          echo "New iOS build version: $ios_build_version"
+          
+          # Update manifest.json version
+          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_marketing_version\"/" "Shared (Extension)/Resources/manifest.json"
           
           cd ..
 
@@ -173,10 +186,18 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           cd "Braver Search"
-          # Get current version and increment for macOS
-          ios_version=$(agvtool what-version -terse)
+          # Get current versions and increment for macOS
+          ios_marketing_version=$(agvtool what-marketing-version -terse1)
+          ios_build_version=$(agvtool what-version -terse)
+          
+          # Marketing version: increment by 0.01 from iOS
+          new_marketing_version=$(echo "$ios_marketing_version + 0.01" | bc)
+          agvtool new-marketing-version $new_marketing_version
+          echo "New macOS marketing version: $(agvtool what-marketing-version -terse1)"
+          
+          # Build version: increment by 1 from iOS
           agvtool next-version -all
-          echo "New macOS version: $(agvtool what-version -terse)"
+          echo "New macOS build version: $(agvtool what-version -terse)"
           cd ..
 
           # Archive
