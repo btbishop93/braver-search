@@ -40,22 +40,24 @@ jobs:
         run: |
           cd "Braver Search"
           
-          # Get current marketing version
-          current_version=$(agvtool what-marketing-version -terse1 | head -n1)
-          echo "Current marketing version: $current_version"
+          # Get current versions
+          current_marketing_version=$(agvtool what-marketing-version -terse1 | head -n1)
+          current_build_version=$(agvtool what-version -terse)
+          echo "Current marketing version: $current_marketing_version"
+          echo "Current build version: $current_build_version"
           
-          # Increment marketing version by 0.01
-          new_version=$(echo "$current_version + 0.01" | bc)
-          echo "Setting new marketing version to: $new_version"
+          # Increment both versions by 0.01
+          new_marketing_version=$(echo "$current_marketing_version + 0.01" | bc)
+          new_build_version=$(echo "$current_build_version + 0.01" | bc)
+          echo "Setting new marketing version to: $new_marketing_version"
+          echo "Setting new build version to: $new_build_version"
           
-          # Update marketing version (CFBundleShortVersionString) for all targets
-          agvtool new-marketing-version $new_version
-          
-          # Increment build number (CFBundleVersion) for all targets
-          agvtool next-version -all
+          # Update both versions
+          agvtool new-marketing-version $new_marketing_version
+          agvtool new-version -all $new_build_version
           
           # Update manifest.json version
-          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Shared (Extension)/Resources/manifest.json"
+          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_marketing_version\"/" "Shared (Extension)/Resources/manifest.json"
           
           # Show the new versions
           echo "New versions:"
