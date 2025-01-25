@@ -164,6 +164,13 @@
 			);
 			target = CE77FAEB2D3C8C8000B47EE3 /* Braver Search Extension (macOS) */;
 		};
+		CECE52B62D44AF65007598D4 /* Exceptions for "macOS (App)" folder in "Braver Search (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CE77FAD52D3C8C8000B47EE3 /* Braver Search (macOS) */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -199,6 +206,9 @@
 		};
 		CE77FAD72D3C8C8000B47EE3 /* macOS (App) */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CECE52B62D44AF65007598D4 /* Exceptions for "macOS (App)" folder in "Braver Search (macOS)" target */,
+			);
 			path = "macOS (App)";
 			sourceTree = "<group>";
 		};
