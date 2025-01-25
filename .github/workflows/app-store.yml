@@ -37,46 +37,29 @@ jobs:
           xcode-version: '16.1'
 
       - name: Increment build number
-        env:
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
           cd "Braver Search"
           
-          # Get latest version from TestFlight
-          echo "Checking latest TestFlight version..."
-          latest_testflight_version=$(xcrun altool --list-apps \
-            --apiKey "$APPLE_API_KEY_ID" \
-            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
-            --output-format json | grep -o '"version":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
+          # Get current marketing version
+          current_version=$(agvtool what-marketing-version -terse1 | head -n1)
+          echo "Current marketing version: $current_version"
           
-          if [ -z "$latest_testflight_version" ]; then
-            echo "No TestFlight version found, reading from project files..."
-            latest_testflight_version=$(agvtool what-marketing-version -terse1 | head -n1)
-            echo "Using version from project files: $latest_testflight_version"
-          else
-            echo "Latest TestFlight version: $latest_testflight_version"
-          fi
+          # Increment marketing version by 0.01
+          new_version=$(echo "$current_version + 0.01" | bc)
+          echo "Setting new marketing version to: $new_version"
           
-          # Simple increment by 0.01
-          new_version=$(echo "$latest_testflight_version + 0.01" | bc)
-          echo "Setting new version to: $new_version"
-          
-          # Update marketing version (CFBundleShortVersionString)
+          # Update marketing version (CFBundleShortVersionString) for all targets
           agvtool new-marketing-version $new_version
           
-          # Update build number (CFBundleVersion) - increment to next number
+          # Increment build number (CFBundleVersion) for all targets
           agvtool next-version -all
           
-          # Update manifest.json version using sed
+          # Update manifest.json version
           sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_version\"/" "Shared (Extension)/Resources/manifest.json"
           
-          echo "Incremented version from $latest_testflight_version to $new_version"
-          
           # Show the new versions
-          echo "New marketing version:"
+          echo "New versions:"
           agvtool what-marketing-version
-          echo "New build number:"
           agvtool what-version
           
           cd ..
@@ -145,6 +128,13 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
+          # Set version for iOS (increment by 0.01)
+          cd "Braver Search"
+          current_version=$(agvtool what-version -terse)
+          ios_version=$(echo "$current_version + 0.01" | bc)
+          agvtool new-version -all $ios_version
+          cd ..
+
           # Archive
           xcodebuild archive \
             -project "Braver Search/Braver Search.xcodeproj" \
@@ -199,6 +189,13 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
+          # Set version for macOS (increment iOS version by 0.01)
+          cd "Braver Search"
+          ios_version=$(agvtool what-version -terse)
+          macos_version=$(echo "$ios_version + 0.01" | bc)
+          agvtool new-version -all $macos_version
+          cd ..
+
           # Archive
           xcodebuild archive \
             -project "Braver Search/Braver Search.xcodeproj" \
