@@ -37,32 +37,30 @@ jobs:
           xcode-version: '16.1'
 
       - name: Increment build number
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
           cd "Braver Search"
           
-          # Get current versions
-          current_marketing_version=$(agvtool what-marketing-version -terse1 | head -n1)
-          current_build_version=$(agvtool what-version -terse)
-          echo "Current marketing version: $current_marketing_version"
-          echo "Current build version: $current_build_version"
+          # Get latest version from TestFlight
+          echo "Checking latest TestFlight version..."
+          latest_version=$(xcrun altool --list-apps \
+            --apiKey "$APPLE_API_KEY_ID" \
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+            --output-format json | grep -o '"version":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
           
-          # Increment both versions by 0.01
-          new_marketing_version=$(echo "$current_marketing_version + 0.01" | bc)
-          new_build_version=$(echo "$current_build_version + 0.01" | bc)
-          echo "Setting new marketing version to: $new_marketing_version"
-          echo "Setting new build version to: $new_build_version"
+          if [ -z "$latest_version" ]; then
+            echo "No TestFlight version found, using current version"
+            latest_version=$(agvtool what-version -terse)
+          fi
           
-          # Update both versions
-          agvtool new-marketing-version $new_marketing_version
-          agvtool new-version -all $new_build_version
+          echo "Latest version: $latest_version"
           
-          # Update manifest.json version
-          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_marketing_version\"/" "Shared (Extension)/Resources/manifest.json"
-          
-          # Show the new versions
-          echo "New versions:"
-          agvtool what-marketing-version
-          agvtool what-version
+          # Set iOS build to latest + 1
+          ios_version=$((latest_version + 1))
+          echo "Setting iOS version to: $ios_version"
+          agvtool new-version -all $ios_version
           
           cd ..
 
@@ -130,13 +128,6 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          # Set version for iOS (increment by 0.01)
-          cd "Braver Search"
-          current_version=$(agvtool what-version -terse)
-          ios_version=$(echo "$current_version + 0.01" | bc)
-          agvtool new-version -all $ios_version
-          cd ..
-
           # Archive
           xcodebuild archive \
             -project "Braver Search/Braver Search.xcodeproj" \
@@ -191,10 +182,11 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          # Set version for macOS (increment iOS version by 0.01)
+          # Set macOS version to iOS + 1
           cd "Braver Search"
           ios_version=$(agvtool what-version -terse)
-          macos_version=$(echo "$ios_version + 0.01" | bc)
+          macos_version=$((ios_version + 1))
+          echo "Setting macOS version to: $macos_version"
           agvtool new-version -all $macos_version
           cd ..
 
