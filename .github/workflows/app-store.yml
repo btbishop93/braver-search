@@ -219,8 +219,8 @@ jobs:
           agvtool new-marketing-version "$MARKETING_VERSION"
           
           # Use incremented build number for macOS
-          echo "Using macOS build number: $BUILD_NUMBER"
-          agvtool new-version -all $BUILD_NUMBER
+          echo "Using macOS build number: $BASE_BUILD_NUMBER"
+          agvtool new-version -all $BASE_BUILD_NUMBER
           
           cd ..
 
@@ -313,7 +313,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           # Increment build number for next run
-          NEW_BUILD_NUMBER=$((BUILD_NUMBER + 1))
+          NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
           echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
           
           # Update GitHub variable
