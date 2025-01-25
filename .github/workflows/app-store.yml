@@ -59,8 +59,11 @@ jobs:
           ios_build_version=$(agvtool what-version -terse)
           echo "New iOS build version: $ios_build_version"
           
-          # Update manifest.json version
-          sed -i '' "s/\"version\": \".*\"/\"version\": \"$new_marketing_version\"/" "Shared (Extension)/Resources/manifest.json"
+          # Update manifest.json version (using integers only)
+          manifest_major=$(echo "$new_marketing_version" | cut -d. -f1)
+          manifest_minor=$(echo "$new_marketing_version" | cut -d. -f2)
+          manifest_version="$manifest_major.$manifest_minor.0"
+          sed -i '' "s/\"version\": \".*\"/\"version\": \"$manifest_version\"/" "Shared (Extension)/Resources/manifest.json"
           
           cd ..
 
