@@ -10,6 +10,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  MARKETING_VERSION: "1.0"
+  BASE_BUILD_NUMBER: ${{ vars.BUILD_NUMBER || 1 }}
+
 jobs:
   deploy:
     name: Build and Deploy
@@ -36,49 +40,24 @@ jobs:
         with:
           xcode-version: '16.1'
 
-      - name: Increment build number
-        env:
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
+      - name: Set iOS version numbers
         run: |
           cd "Braver Search"
           
-          # Get current marketing version
-          current_marketing_version=$(agvtool what-marketing-version -terse1)
-          echo "Current marketing version: $current_marketing_version"
+          echo "Using build number: $BASE_BUILD_NUMBER"
           
-          # Get latest build number from App Store Connect
-          echo "Checking latest TestFlight build number..."
-          latest_build=$(xcrun altool --list-builds --apiKey "$APPLE_API_KEY_ID" --apiIssuer "$APPLE_API_KEY_ISSUER_ID" --app-type ios --bundle-id "xyz.bsquared.Braver-Search" --output-format json | grep -o '"buildVersion":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
+          # Set marketing version
+          agvtool new-marketing-version "$MARKETING_VERSION"
           
-          if [ -z "$latest_build" ]; then
-            echo "No TestFlight build found, checking App Store Connect..."
-            latest_build=$(xcrun altool --list-builds --apiKey "$APPLE_API_KEY_ID" --apiIssuer "$APPLE_API_KEY_ISSUER_ID" --app-type osx --bundle-id "xyz.bsquared.Braver-Search" --output-format json | grep -o '"buildVersion":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
-          fi
+          # Set iOS build number
+          agvtool new-version -all $BASE_BUILD_NUMBER
           
-          if [ -z "$latest_build" ]; then
-            echo "No builds found in App Store Connect, using current Info.plist version"
-            latest_build=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "iOS (App)/Info.plist")
-          fi
-          echo "Latest build number: $latest_build"
-          
-          # Increment iOS versions
-          # Marketing version: increment by 0.01
-          new_marketing_version=$(echo "$current_marketing_version + 0.01" | bc)
-          agvtool new-marketing-version "$new_marketing_version"
-          echo "New marketing version: $(agvtool what-marketing-version -terse1)"
-          
-          # Build version: increment by 1 for iOS from latest TestFlight build
-          new_build=$((latest_build + 1))
-          agvtool new-version -all $new_build
-          ios_build_version=$(agvtool what-version -terse)
-          echo "New iOS build version: $ios_build_version"
-          
-          # Update manifest.json version (using integers only)
-          manifest_major=$(echo "$new_marketing_version" | cut -d. -f1)
-          manifest_minor=$(echo "$new_marketing_version" | cut -d. -f2)
-          manifest_version="$manifest_major.$manifest_minor.0"
-          sed -i '' "s/\"version\": \".*\"/\"version\": \"$manifest_version\"/" "Shared (Extension)/Resources/manifest.json"
+          # Update manifest.json version
+          major_version=$(echo "$MARKETING_VERSION" | cut -d. -f1)
+          minor_version=$(echo "$MARKETING_VERSION" | cut -d. -f2)
+          manifest_version="$major_version.$minor_version.0"
+          echo "Setting manifest version to $manifest_version"
+          sed -i '' "s/\"version\": \"[^\"]*\"/\"version\": \"$manifest_version\"/" "Shared (Extension)/Resources/manifest.json"
           
           cd ..
 
@@ -196,21 +175,29 @@ jobs:
           echo "iOS build directory contents:"
           ls -R build/ios/
 
+      - name: Increment build number for macOS
+        run: |
+          # Increment build number for macOS
+          NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
+          echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
+
+      - name: Set macOS version numbers
+        run: |
+          cd "Braver Search"
+          
+          # Keep same marketing version as iOS
+          agvtool new-marketing-version "$MARKETING_VERSION"
+          
+          # Use incremented build number for macOS
+          echo "Using macOS build number: $BUILD_NUMBER"
+          agvtool new-version -all $BUILD_NUMBER
+          
+          cd ..
+
       - name: Build macOS App
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          cd "Braver Search"
-          # Get iOS build version and increment for macOS
-          ios_build_version=$(agvtool what-version -terse)
-          
-          # Keep same marketing version as iOS
-          # Only increment build version by 1 from iOS
-          new_build=$((ios_build_version + 1))
-          agvtool new-version -all $new_build
-          echo "New macOS build version: $(agvtool what-version -terse)"
-          cd ..
-
           # Archive
           xcodebuild archive \
             -project "Braver Search/Braver Search.xcodeproj" \
@@ -261,6 +248,12 @@ jobs:
             -allowProvisioningUpdates \
             -verbose
 
+      - name: Increment build number for next run
+        run: |
+          # Increment build number for next run
+          NEXT_BUILD=$((BUILD_NUMBER + 1))
+          echo "NEXT_BUILD_NUMBER=$NEXT_BUILD" >> $GITHUB_ENV
+
       - name: Upload to TestFlight
         env:
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
@@ -280,14 +273,6 @@ jobs:
           fi
           echo "Found IPA at: $IPA_PATH"
 
-          # Find the APP file
-          APP_PATH=$(find build/macos -name "*.pkg" -type f)
-          if [ -z "$APP_PATH" ]; then
-            echo "Error: No PKG file found in build/macos directory"
-            exit 1
-          fi
-          echo "Found APP at: $APP_PATH"
-
           # Upload iOS build
           echo "Uploading iOS build..."
           xcrun altool --upload-app --type ios \
@@ -295,6 +280,14 @@ jobs:
             --apiKey "$APPLE_API_KEY_ID" \
             --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
             --verbose
+
+          # Find the APP file
+          APP_PATH=$(find build/macos -name "*.pkg" -type f)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: No PKG file found in build/macos directory"
+            exit 1
+          fi
+          echo "Found APP at: $APP_PATH"
           
           # Upload macOS build
           echo "Uploading macOS build..."
@@ -310,3 +303,14 @@ jobs:
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
           rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/*
           rm -f ~/.appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8
+
+      - name: Update GitHub build number variable
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X PATCH /repos/${{ github.repository }}/actions/variables/BUILD_NUMBER \
+            -f value="$NEXT_BUILD_NUMBER" \
+            || gh api -X POST /repos/${{ github.repository }}/actions/variables \
+               -f name="BUILD_NUMBER" \
+               -f value="$NEXT_BUILD_NUMBER"
