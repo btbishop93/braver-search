@@ -204,9 +204,9 @@ jobs:
           echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
           
           # Update GitHub variable
-          gh api -X PATCH /repos/${{ github.repository }}/actions/variables/BUILD_NUMBER \
+          gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
             -f value="$NEW_BUILD_NUMBER" \
-            || gh api -X POST /repos/${{ github.repository }}/actions/variables \
+            || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
                -f name="BUILD_NUMBER" \
                -f value="$NEW_BUILD_NUMBER"
 
@@ -305,15 +305,15 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           # Increment build number for next run
-          NEXT_BUILD=$((BUILD_NUMBER + 1))
-          echo "NEXT_BUILD_NUMBER=$NEXT_BUILD" >> $GITHUB_ENV
+          NEW_BUILD_NUMBER=$((BUILD_NUMBER + 1))
+          echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
           
           # Update GitHub variable
-          gh api -X PATCH /repos/${{ github.repository }}/actions/variables/BUILD_NUMBER \
-            -f value="$NEXT_BUILD_NUMBER" \
-            || gh api -X POST /repos/${{ github.repository }}/actions/variables \
+          gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
+            -f value="$NEW_BUILD_NUMBER" \
+            || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
                -f name="BUILD_NUMBER" \
-               -f value="$NEXT_BUILD_NUMBER"
+               -f value="$NEW_BUILD_NUMBER"
 
       # Cleanup
       - name: Clean up secrets
