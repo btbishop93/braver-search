@@ -99,116 +99,116 @@ jobs:
           echo "$APPLE_API_PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8
 
       # iOS Steps
-      # - name: Set iOS version numbers
-      #   run: |
-      #     cd "Braver Search"
+      - name: Set iOS version numbers
+        run: |
+          cd "Braver Search"
           
-      #     echo "Using build number: $BASE_BUILD_NUMBER"
+          echo "Using build number: $BASE_BUILD_NUMBER"
           
-      #     # Set marketing version
-      #     agvtool new-marketing-version "$MARKETING_VERSION"
+          # Set marketing version
+          agvtool new-marketing-version "$MARKETING_VERSION"
           
-      #     # Set iOS build number
-      #     agvtool new-version -all $BASE_BUILD_NUMBER
+          # Set iOS build number
+          agvtool new-version -all $BASE_BUILD_NUMBER
           
-      #     # Update manifest.json version
-      #     major_version=$(echo "$MARKETING_VERSION" | cut -d. -f1)
-      #     minor_version=$(echo "$MARKETING_VERSION" | cut -d. -f2)
-      #     manifest_version="$major_version.$minor_version.0"
-      #     echo "Setting manifest version to $manifest_version"
-      #     sed -i '' "s/\"version\": \"[^\"]*\"/\"version\": \"$manifest_version\"/" "Shared (Extension)/Resources/manifest.json"
+          # Update manifest.json version
+          major_version=$(echo "$MARKETING_VERSION" | cut -d. -f1)
+          minor_version=$(echo "$MARKETING_VERSION" | cut -d. -f2)
+          manifest_version="$major_version.$minor_version.0"
+          echo "Setting manifest version to $manifest_version"
+          sed -i '' "s/\"version\": \"[^\"]*\"/\"version\": \"$manifest_version\"/" "Shared (Extension)/Resources/manifest.json"
           
-      #     cd ..
+          cd ..
 
-      # - name: Build iOS App
-      #   env:
-      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      #   run: |
-      #     # Archive
-      #     xcodebuild archive \
-      #       -project "Braver Search/Braver Search.xcodeproj" \
-      #       -scheme "Braver Search (iOS)" \
-      #       -configuration Release \
-      #       -archivePath build/ios/BraverSearch.xcarchive \
-      #       -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
-      #       -allowProvisioningUpdates \
-      #       DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-      #       CODE_SIGN_STYLE=Manual \
-      #       CODE_SIGN_IDENTITY="Apple Distribution" \
-      #       "Braver Search (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS App Store" \
-      #       "Braver Search Extension (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS Extension App Store" \
-      #       OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/app-signing.keychain-db" \
-      #       ENABLE_BITCODE=NO
+      - name: Build iOS App
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          # Archive
+          xcodebuild archive \
+            -project "Braver Search/Braver Search.xcodeproj" \
+            -scheme "Braver Search (iOS)" \
+            -configuration Release \
+            -archivePath build/ios/BraverSearch.xcarchive \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.1' \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            "Braver Search (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS App Store" \
+            "Braver Search Extension (iOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search iOS Extension App Store" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/app-signing.keychain-db" \
+            ENABLE_BITCODE=NO
 
-      #     # Create exportOptions.plist for iOS
-      #     cat > exportOptions.plist << EOF
-      #     <?xml version="1.0" encoding="UTF-8"?>
-      #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      #     <plist version="1.0">
-      #     <dict>
-      #         <key>method</key>
-      #         <string>app-store-connect</string>
-      #         <key>teamID</key>
-      #         <string>$APPLE_TEAM_ID</string>
-      #         <key>signingStyle</key>
-      #         <string>manual</string>
-      #         <key>provisioningProfiles</key>
-      #         <dict>
-      #             <key>xyz.bsquared.Braver-Search</key>
-      #             <string>Braver Search iOS App Store</string>
-      #             <key>xyz.bsquared.Braver-Search.Extension</key>
-      #             <string>Braver Search iOS Extension App Store</string>
-      #         </dict>
-      #     </dict>
-      #     </plist>
-      #     EOF
+          # Create exportOptions.plist for iOS
+          cat > exportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store-connect</string>
+              <key>teamID</key>
+              <string>$APPLE_TEAM_ID</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>xyz.bsquared.Braver-Search</key>
+                  <string>Braver Search iOS App Store</string>
+                  <key>xyz.bsquared.Braver-Search.Extension</key>
+                  <string>Braver Search iOS Extension App Store</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
 
-      #     # Export IPA
-      #     xcodebuild -exportArchive \
-      #       -archivePath build/ios/BraverSearch.xcarchive \
-      #       -exportPath build/ios \
-      #       -exportOptionsPlist exportOptions.plist \
-      #       -allowProvisioningUpdates
+          # Export IPA
+          xcodebuild -exportArchive \
+            -archivePath build/ios/BraverSearch.xcarchive \
+            -exportPath build/ios \
+            -exportOptionsPlist exportOptions.plist \
+            -allowProvisioningUpdates
 
-      #     # List build directory contents for debugging
-      #     echo "iOS build directory contents:"
-      #     ls -R build/ios/
+          # List build directory contents for debugging
+          echo "iOS build directory contents:"
+          ls -R build/ios/
 
-      # - name: Upload iOS App to TestFlight
-      #   env:
-      #     APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-      #     APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
-      #   run: |
-      #     # Find the IPA file
-      #     IPA_PATH=$(find build/ios -name "*.ipa" -type f)
-      #     if [ -z "$IPA_PATH" ]; then
-      #       echo "Error: No IPA file found in build/ios directory"
-      #       exit 1
-      #     fi
-      #     echo "Found IPA at: $IPA_PATH"
+      - name: Upload iOS App to TestFlight
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
+        run: |
+          # Find the IPA file
+          IPA_PATH=$(find build/ios -name "*.ipa" -type f)
+          if [ -z "$IPA_PATH" ]; then
+            echo "Error: No IPA file found in build/ios directory"
+            exit 1
+          fi
+          echo "Found IPA at: $IPA_PATH"
 
-      #     # Upload iOS build
-      #     echo "Uploading iOS build..."
-      #     xcrun altool --upload-app --type ios \
-      #       --file "$IPA_PATH" \
-      #       --apiKey "$APPLE_API_KEY_ID" \
-      #       --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
+          # Upload iOS build
+          echo "Uploading iOS build..."
+          xcrun altool --upload-app --type ios \
+            --file "$IPA_PATH" \
+            --apiKey "$APPLE_API_KEY_ID" \
+            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
 
-      # - name: Update GitHub build number variable for iOS
-      #   if: success()
-      #   env:
-      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-      #   run: |
-      #     # Increment build number for macOS
-      #     NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
-      #     echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
+      - name: Update GitHub build number variable for iOS
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          # Increment build number for macOS
+          NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
+          echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
           
-      #     # Update GitHub variable
-      #     gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
-      #       -f value="$NEW_BUILD_NUMBER" \
-      #       || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
-      #          -f name="BUILD_NUMBER" \
-      #          -f value="$NEW_BUILD_NUMBER"
+          # Update GitHub variable
+          gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
+            -f value="$NEW_BUILD_NUMBER" \
+            || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
+               -f name="BUILD_NUMBER" \
+               -f value="$NEW_BUILD_NUMBER"
 
       # macOS Steps
       - name: Set macOS version numbers
