@@ -7,7 +7,7 @@ on:
 
 env:
   MARKETING_VERSION: "1.0"
-  BASE_BUILD_NUMBER: ${{ vars.BUILD_NUMBER || 6 }}
+  BASE_BUILD_NUMBER: ${{ vars.BUILD_NUMBER || 7 }}
 
 permissions:
   actions: write
@@ -194,21 +194,21 @@ jobs:
       #       --apiKey "$APPLE_API_KEY_ID" \
       #       --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
 
-      - name: Update GitHub build number variable for iOS
-        if: success()
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          # Increment build number for macOS
-          NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
-          echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
+      # - name: Update GitHub build number variable for iOS
+      #   if: success()
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #   run: |
+      #     # Increment build number for macOS
+      #     NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
+      #     echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
           
-          # Update GitHub variable
-          gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
-            -f value="$NEW_BUILD_NUMBER" \
-            || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
-               -f name="BUILD_NUMBER" \
-               -f value="$NEW_BUILD_NUMBER"
+      #     # Update GitHub variable
+      #     gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
+      #       -f value="$NEW_BUILD_NUMBER" \
+      #       || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
+      #          -f name="BUILD_NUMBER" \
+      #          -f value="$NEW_BUILD_NUMBER"
 
       # macOS Steps
       - name: Set macOS version numbers
@@ -244,6 +244,14 @@ jobs:
             "Braver Search (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS App Store" \
             "Braver Search Extension (macOS):PROVISIONING_PROFILE_SPECIFIER=Braver Search macOS Extension App Store" \
             OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/app-signing.keychain-db"
+
+          # Inspect archive contents
+          echo "Archive contents:"
+          ls -R build/macos/BraverSearch.xcarchive/Products/Applications/
+          echo "Extension location:"
+          find build/macos/BraverSearch.xcarchive -name "*.appex"
+          echo "Manifest location:"
+          find build/macos/BraverSearch.xcarchive -name "manifest.json"
 
           # Create exportOptions.plist for macOS
           cat > exportOptions.plist << EOF
