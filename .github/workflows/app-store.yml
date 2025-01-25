@@ -197,7 +197,7 @@ jobs:
       - name: Update GitHub build number variable for iOS
         if: success()
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           # Increment build number for macOS
           NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
@@ -302,7 +302,7 @@ jobs:
       - name: Update GitHub build number variable for macOS
         if: success()
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           # Increment build number for next run
           NEXT_BUILD=$((BUILD_NUMBER + 1))
