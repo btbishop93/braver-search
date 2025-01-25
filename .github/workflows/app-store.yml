@@ -37,30 +37,20 @@ jobs:
           xcode-version: '16.1'
 
       - name: Increment build number
-        env:
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_KEY_ISSUER_ID: ${{ secrets.APPLE_API_KEY_ISSUER_ID }}
         run: |
           cd "Braver Search"
           
-          # Get latest version from TestFlight
-          echo "Checking latest TestFlight version..."
-          latest_version=$(xcrun altool --list-apps \
-            --apiKey "$APPLE_API_KEY_ID" \
-            --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
-            --output-format json | grep -o '"version":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
+          # Enable version tracking if not already enabled
+          agvtool enable-version-updates
           
-          if [ -z "$latest_version" ]; then
-            echo "No TestFlight version found, using current version"
-            latest_version=$(agvtool what-version -terse)
-          fi
+          # Get current version
+          current_version=$(agvtool what-version -terse)
+          echo "Current version: $current_version"
           
-          echo "Latest version: $latest_version"
-          
-          # Set iOS build to latest + 1
-          ios_version=$((latest_version + 1))
-          echo "Setting iOS version to: $ios_version"
-          agvtool new-version -all $ios_version
+          # Increment iOS version
+          agvtool next-version -all
+          ios_version=$(agvtool what-version -terse)
+          echo "New iOS version: $ios_version"
           
           cd ..
 
@@ -182,12 +172,11 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          # Set macOS version to iOS + 1
           cd "Braver Search"
+          # Get current version and increment for macOS
           ios_version=$(agvtool what-version -terse)
-          macos_version=$((ios_version + 1))
-          echo "Setting macOS version to: $macos_version"
-          agvtool new-version -all $macos_version
+          agvtool next-version -all
+          echo "New macOS version: $(agvtool what-version -terse)"
           cd ..
 
           # Archive
