@@ -12,12 +12,18 @@ env:
 permissions:
   actions: write
   contents: read
+  repository-projects: write
+  id-token: write
 
 jobs:
   deploy:
     name: Build and Deploy
     runs-on: macos-latest
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      actions: write
+      contents: read
+      repository-projects: write
+      id-token: write
     
     env:
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
