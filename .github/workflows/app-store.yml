@@ -49,11 +49,16 @@ jobs:
           
           # Get latest build number from App Store Connect
           echo "Checking latest TestFlight build number..."
-          latest_build=$(xcrun altool --list-apps --apiKey "$APPLE_API_KEY_ID" --apiIssuer "$APPLE_API_KEY_ISSUER_ID" --output-format json | grep -o '"version":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
+          latest_build=$(xcrun altool --list-builds --apiKey "$APPLE_API_KEY_ID" --apiIssuer "$APPLE_API_KEY_ISSUER_ID" --app-type ios --bundle-id "xyz.bsquared.Braver-Search" --output-format json | grep -o '"buildVersion":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
           
           if [ -z "$latest_build" ]; then
-            echo "No TestFlight build found, using current build number"
-            latest_build=$(agvtool what-version -terse)
+            echo "No TestFlight build found, checking App Store Connect..."
+            latest_build=$(xcrun altool --list-builds --apiKey "$APPLE_API_KEY_ID" --apiIssuer "$APPLE_API_KEY_ISSUER_ID" --app-type osx --bundle-id "xyz.bsquared.Braver-Search" --output-format json | grep -o '"buildVersion":"[^"]*"' | cut -d'"' -f4 | sort -V | tail -n1)
+          fi
+          
+          if [ -z "$latest_build" ]; then
+            echo "No builds found in App Store Connect, using current Info.plist version"
+            latest_build=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "iOS (App)/Info.plist")
           fi
           echo "Latest build number: $latest_build"
           
