@@ -26,5 +26,7 @@
     <string>com.apple.Safari.web-extension</string>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2025 Brenden Bishop. All rights reserved.</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist> 
