@@ -9,5 +9,9 @@
         <key>NSExtensionPrincipalClass</key>
         <string>$(PRODUCT_MODULE_NAME).SafariWebExtensionHandler</string>
     </dict>
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+    <key>CFBundleVersion</key>
+    <string>$(BUILD_NUMBER)</string>
 </dict>
 </plist> 
