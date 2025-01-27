@@ -16,6 +16,20 @@ done
 
 /opt/homebrew/bin/rsvg-convert -w 167 -h 167 braver.svg > "$IOS_ASSET_PATH/icon-83.5@2x.png"
 
+# Add missing iOS sizes
+declare -a ios_sizes=(
+    "16" "20" "29" "32" "40" "48" "60" "64" 
+    "76" "83.5" "96" "128" "256" "512" "1024" "2048"
+)
+
+# Add retina validation
+for size in 20 29 40 60 76; do
+    if [ ! -f "$IOS_ASSET_PATH/icon-${size}@2x.png" ]; then
+        echo "Error: Missing iOS icon ${size}@2x"
+        exit 1
+    fi
+done
+
 # Generate macOS icons (rounded)
 MAC_ASSET_PATH="Braver Search/Shared (App)/Assets.xcassets/MacAppIcon.appiconset"
 declare -a mac_sizes=("16" "32" "64" "128" "256" "512" "1024")
