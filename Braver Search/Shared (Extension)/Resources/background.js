@@ -2,6 +2,24 @@
 
 console.log("Braver Search: Background script loaded");
 
+const SEARCH_ENGINE_HOSTS = [
+    'google.com',
+    'google.co.uk',
+    'google.ca',
+    'google.com.au',
+    'bing.com',
+    'duckduckgo.com',
+    'search.yahoo.com',
+    'yandex.com'
+];
+
+function isSupportedSearchEngine(hostname) {
+    return SEARCH_ENGINE_HOSTS.some(domain => 
+        hostname === domain || 
+        hostname.endsWith(`.${domain}`)
+    );
+}
+
 // Function to check if redirect is enabled
 async function isRedirectEnabled() {
     try {
@@ -31,9 +49,9 @@ browser.webNavigation.onBeforeNavigate.addListener(async (details) => {
         console.log("Braver Search: URL detected", details.url);
         const url = new URL(details.url);
         
-        // Skip if already on Brave Search
-        if (url.hostname === 'search.brave.com') {
-            console.log("Braver Search: Skipping Brave Search URL");
+        // Check if this is a supported search engine domain
+        if (!isSupportedSearchEngine(url.hostname)) {
+            console.log("Braver Search: Not a supported search engine", url.hostname);
             return;
         }
         
