@@ -10,8 +10,8 @@
         <string>$(PRODUCT_MODULE_NAME).SafariWebExtensionHandler</string>
     </dict>
     <key>CFBundleShortVersionString</key>
-    <string>$(MARKETING_VERSION)</string>
+    <string>$(INFOPLIST_VERSION_STRING)</string>
     <key>CFBundleVersion</key>
-    <string>$(BUILD_NUMBER)</string>
+    <string>$(INFOPLIST_BUILD_NUMBER)</string>
 </dict>
 </plist> 
