@@ -12,8 +12,8 @@
 		<string>SafariWebExtensionHandler</string>
 	</dict>
     <key>CFBundleShortVersionString</key>
-    <string>$(INFOPLIST_VERSION_STRING)</string>
+    <string>$(MARKETING_VERSION)</string>
     <key>CFBundleVersion</key>
-    <string>$(INFOPLIST_BUILD_NUMBER)</string>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
 </dict>
 </plist>
