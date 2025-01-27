@@ -4,10 +4,15 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump type (patch/minor/major)'
+        required: false
+        default: 'patch'
 
 env:
-  MARKETING_VERSION: "1.0"
-  BASE_BUILD_NUMBER: ${{ vars.BUILD_NUMBER || 7 }}
+  MARKETING_VERSION: ${{ vars.MARKETING_VERSION || '1.0.0' }}
+  BUILD_NUMBER: ${{ vars.BUILD_NUMBER || 1 }}
 
 permissions:
   actions: write
@@ -98,26 +103,38 @@ jobs:
           mkdir -p ~/.appstoreconnect/private_keys
           echo "$APPLE_API_PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8
 
-      # iOS Steps
+      - name: Calculate new version
+        id: version
+        run: |
+          IFS='.' read -r major minor patch <<< "$MARKETING_VERSION"
+          case '${{ inputs.version_bump }}' in
+            major)
+              major=$((major + 1))
+              minor=0
+              patch=0
+              ;;
+            minor)
+              minor=$((minor + 1))
+              patch=0
+              ;;
+            *)
+              patch=$((patch + 1))
+              ;;
+          esac
+          echo "new_marketing_version=$major.$minor.$patch" >> $GITHUB_OUTPUT
+          echo "Using build number: $BUILD_NUMBER"
+
       - name: Set iOS version numbers
         run: |
           cd "Braver Search"
-          
-          echo "Using build number: $BASE_BUILD_NUMBER"
-          
-          # Set marketing version
-          agvtool new-marketing-version "$MARKETING_VERSION"
-          
-          # Set iOS build number
-          agvtool new-version -all $BASE_BUILD_NUMBER
-          
+          agvtool new-marketing-version "${{ steps.version.outputs.new_marketing_version }}"
+          agvtool new-version -all $BUILD_NUMBER
           # Update manifest.json version
-          major_version=$(echo "$MARKETING_VERSION" | cut -d. -f1)
-          minor_version=$(echo "$MARKETING_VERSION" | cut -d. -f2)
+          major_version=$(echo "${{ steps.version.outputs.new_marketing_version }}" | cut -d. -f1)
+          minor_version=$(echo "${{ steps.version.outputs.new_marketing_version }}" | cut -d. -f2)
           manifest_version="$major_version.$minor_version.0"
           echo "Setting manifest version to $manifest_version"
           sed -i '' "s/\"version\": \"[^\"]*\"/\"version\": \"$manifest_version\"/" "Shared (Extension)/Resources/manifest.json"
-          
           cd ..
 
       - name: Build iOS App
@@ -194,34 +211,11 @@ jobs:
             --apiKey "$APPLE_API_KEY_ID" \
             --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
 
-      - name: Update GitHub build number variable for iOS
-        if: success()
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          # Increment build number for macOS
-          NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
-          echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
-          
-          # Update GitHub variable
-          gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
-            -f value="$NEW_BUILD_NUMBER" \
-            || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
-               -f name="BUILD_NUMBER" \
-               -f value="$NEW_BUILD_NUMBER"
-
-      # macOS Steps
       - name: Set macOS version numbers
         run: |
           cd "Braver Search"
-          
-          # Keep same marketing version as iOS
-          agvtool new-marketing-version "$MARKETING_VERSION"
-          
-          # Use incremented build number for macOS
-          echo "Using macOS build number: $BASE_BUILD_NUMBER"
-          agvtool new-version -all $BASE_BUILD_NUMBER
-          
+          agvtool new-marketing-version "${{ steps.version.outputs.new_marketing_version }}"
+          agvtool new-version -all $BUILD_NUMBER
           cd ..
 
       - name: Build macOS App
@@ -307,21 +301,19 @@ jobs:
             --apiIssuer "$APPLE_API_KEY_ISSUER_ID" \
             --verbose
 
-      - name: Update GitHub build number variable for macOS
+      - name: Update GitHub variables
         if: success()
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          # Increment build number for next run
-          NEW_BUILD_NUMBER=$((BASE_BUILD_NUMBER + 1))
-          echo "BUILD_NUMBER=$NEW_BUILD_NUMBER" >> $GITHUB_ENV
-          
-          # Update GitHub variable
+          # Update marketing version
+          gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/MARKETING_VERSION \
+            -f value="${{ steps.version.outputs.new_marketing_version }}"
+
+          # Increment build number
+          NEW_BUILD_NUMBER=$((BUILD_NUMBER + 1))
           gh api -X PATCH /repos/btbishop93/braver-search/actions/variables/BUILD_NUMBER \
-            -f value="$NEW_BUILD_NUMBER" \
-            || gh api -X POST /repos/btbishop93/braver-search/actions/variables \
-               -f name="BUILD_NUMBER" \
-               -f value="$NEW_BUILD_NUMBER"
+            -f value="$NEW_BUILD_NUMBER"
 
       # Cleanup
       - name: Clean up secrets
