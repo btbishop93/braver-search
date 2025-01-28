@@ -31,7 +31,7 @@ for size in 20 29 40 60 76; do
 done
 
 # Generate macOS icons (rounded)
-MAC_ASSET_PATH="Braver Search/Shared (App)/Assets.xcassets/MacAppIcon.appiconset"
+MAC_ASSET_PATH="Braver Search/Shared (App)/Assets.xcassets/AppIcon.appiconset"
 declare -a mac_sizes=("16" "32" "64" "128" "256" "512" "1024")
 
 # Generate 1x and 2x sizes
