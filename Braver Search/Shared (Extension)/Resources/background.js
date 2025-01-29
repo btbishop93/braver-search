@@ -9,14 +9,17 @@ const SEARCH_ENGINE_HOSTS = [
     'google.com.au',
     'bing.com',
     'duckduckgo.com',
+    'www.google.com',
+    'www.bing.com',
+    'www.duckduckgo.com',
+    'www.yandex.com',
     'search.yahoo.com',
-    'yandex.com'
+    'www.yandex.com'
 ];
 
 function isSupportedSearchEngine(hostname) {
     return SEARCH_ENGINE_HOSTS.some(domain => 
-        hostname === domain || 
-        hostname.endsWith(`.${domain}`)
+        hostname === domain
     );
 }
 
