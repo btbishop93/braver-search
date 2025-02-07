@@ -121,6 +121,7 @@
 			membershipExceptions = (
 				"/Localized: Resources/Main.html",
 				Assets.xcassets,
+				Resources/Icon.png,
 				Resources/Script.js,
 				Resources/Style.css,
 				ViewController.swift,
