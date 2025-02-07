@@ -45,7 +45,7 @@ body {
 
 h2 {
     margin: 0;
-    font-size: 1.25em;
+    font-size: 1.2em;
     text-align: center;
 }
 
@@ -60,8 +60,8 @@ h2 {
 .toggle {
     position: relative;
     display: inline-block;
-    width: 64px;
-    height: 36px;
+    width: 60px;
+    height: 32px;
 }
 
 .toggle input {
@@ -79,15 +79,15 @@ h2 {
     bottom: 0;
     background-color: var(--toggle-bg);
     transition: .2s;
-    border-radius: 36px;
+    border-radius: 32px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 28px;
-    width: 28px;
-    left: 4px;
+    height: 24px;
+    width: 24px;
+    left: 6px;
     bottom: 4px;
     background-color: white;
     transition: .2s;
@@ -100,7 +100,7 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(28px);
+    transform: translateX(24px);
 }
 
 .status {
@@ -156,6 +156,10 @@ input:checked + .slider:before {
 
 .disclaimer a:hover {
     text-decoration: underline;
+}
+
+.disclaimer.pb {
+    margin-bottom: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
