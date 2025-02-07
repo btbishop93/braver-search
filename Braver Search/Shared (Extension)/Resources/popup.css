@@ -34,7 +34,7 @@ body {
 
 .container {
     width: 280px;
-    padding: 16px;
+    padding: 16px 16px 0 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -134,7 +134,7 @@ input:checked + .slider:before {
 }
 
 .description {
-    margin: 16px 0;
+    margin: 8px 0;
     font-size: 14px;
     text-align: center;
     color: var(--description-color);
@@ -168,4 +168,8 @@ input:checked + .slider:before {
         --description-color: #999;
         --toggle-bg: #636366;
     }
+}
+
+.section {
+    padding: 16px 16px 0 16px;
 }

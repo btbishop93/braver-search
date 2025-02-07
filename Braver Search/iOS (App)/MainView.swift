@@ -59,6 +59,20 @@ struct MainView: View {
                 } footer: {
                     Text("Powered by Brave Search")
                 }
+
+                Section {
+                    Link(destination: URL(string: "https://buymeacoffee.com/brendenbishop")!) {
+                        Image("BmcButton")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 200)
+                    }
+                } header: {
+                    Text("Want to support me?")
+                } footer: {
+                    Text("Note: All donations are optional and not required to use the app.")
+                }
+                .listRowBackground(Color.clear)
             }
             .navigationTitle("Braver Search")
         }
