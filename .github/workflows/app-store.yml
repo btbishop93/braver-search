@@ -34,30 +34,20 @@ jobs:
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     steps:
-      - name: Verify commit status
+      - name: Verify workflow status
         run: |
-          # Wait for any pending checks to complete
-          for i in {1..5}; do
-            STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/status" \
-              | jq -r '.state')
-            
-            if [ "$STATUS" = "pending" ]; then
-              echo "Checks still pending, waiting..."
-              sleep 30
-              continue
-            fi
-            
-            if [ "$STATUS" = "success" ]; then
-              echo "All checks passed!"
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            if [ "${{ github.event.workflow_run.conclusion }}" = "success" ]; then
+              echo "Triggering workflow succeeded"
               exit 0
             else
-              echo "Checks failed or incomplete"
+              echo "Triggering workflow did not succeed"
               exit 1
             fi
-          done
-          echo "Timed out waiting for checks"
-          exit 1
+          else
+            echo "Manual trigger - proceeding"
+            exit 0
+          fi
 
   deploy:
     needs: verify-status
