@@ -70,7 +70,7 @@ struct MainView: View {
                 } header: {
                     Text("Want to support me?")
                 } footer: {
-                    Text("Note: All donations are optional and not required to use the app.")
+                    Text("Donations are optional, not required to use the app, nor for any other digital products/services.")
                 }
                 .listRowBackground(Color.clear)
             }
