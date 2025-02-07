@@ -1,8 +1,11 @@
 name: App Store Build & Deployment
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Tests"]  # This should match the name in test.yml
+    types:
+      - completed
+    branches: [main]
   workflow_dispatch:
     inputs:
       version_bump:
@@ -25,7 +28,42 @@ permissions:
   id-token: write
 
 jobs:
+  verify-status:
+    if: |
+      github.event_name == 'workflow_dispatch' || 
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify commit status
+        run: |
+          # Wait for any pending checks to complete
+          for i in {1..5}; do
+            STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/status" \
+              | jq -r '.state')
+            
+            if [ "$STATUS" = "pending" ]; then
+              echo "Checks still pending, waiting..."
+              sleep 30
+              continue
+            fi
+            
+            if [ "$STATUS" = "success" ]; then
+              echo "All checks passed!"
+              exit 0
+            else
+              echo "Checks failed or incomplete"
+              exit 1
+            fi
+          done
+          echo "Timed out waiting for checks"
+          exit 1
+
   deploy:
+    needs: verify-status
+    if: |
+      github.event_name == 'workflow_dispatch' || 
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     name: Build and Deploy
     runs-on: macos-latest
     permissions:
